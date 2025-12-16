@@ -1,0 +1,1061 @@
+Logo
+latest
+Search docs
+Pybricks modules
+
+hubs – Built-in hub functions
+Move Hub
+City Hub
+Technic Hub
+Prime Hub / Inventor Hub
+Status light examples
+Matrix display examples
+Button examples
+IMU examples
+Bluetooth examples
+System examples
+Essential Hub
+pupdevices – Motors, sensors, lights
+iodevices – Custom devices
+parameters – Parameters and constants
+tools – General purpose tools
+robotics – Robotics and drive bases
+Signals and Units
+Code with blocks
+
+Other blocks
+MicroPython modules
+
+Built-in classes and functions
+Exceptions and errors
+micropython – MicroPython internals
+uerrno – Error codes
+uio – Input/output streams
+ujson – JSON encoding and decoding
+umath – Math functions
+urandom – Pseudo-random numbers
+uselect – Wait for events
+ustruct – Pack and unpack binary data
+usys – System specific functions
+ hubs – Built-in hub functions Prime Hub / Inventor Hub Edit on GitHub
+Prime Hub / Inventor Hub¶
+../_images/hub-spike-inventor.png
+../_images/pybricks_variables_set_inventor_hub_option0.svg
+
+../_images/pybricks_variables_set_inventor_hub_option4.svg
+
+classInventorHub¶
+This class is the same as the PrimeHub class, shown below. Both classes work on both hubs.
+
+These hubs are completely identical. They use the same Pybricks firmware.
+
+../_images/pybricks_variables_set_prime_hub_option0.svg
+
+../_images/pybricks_variables_set_prime_hub_option4.svg
+
+classPrimeHub(top_side=Axis.Z, front_side=Axis.X, broadcast_channel=0, observe_channels=[])¶
+LEGO® SPIKE Prime Hub.
+
+Initializes the hub. Optionally, specify how the hub is placed in your design by saying in which direction the top side (with the buttons) and front side (with the USB port) are pointing.
+
+Parameters
+:
+top_side (Axis) – The axis that passes through the top side of the hub.
+
+front_side (Axis) – The axis that passes through the front side of the hub.
+
+broadcast_channel – A value from 0 to 255 indicating which channel hub.ble.broadcast() will use. Default is channel 0.
+
+observe_channels – A list of channels to listen to when hub.ble.observe() is called. Listening to more channels requires more memory. Default is an empty list (no channels).
+
+Changed in version 3.3: Added broadcast_channel and observe_channels arguments.
+
+Using the hub status light
+
+../_images/primehub_light.png
+../_images/pybricks_blockLightOnColor_primehub_on.svg
+
+light.on(color)¶
+Turns on the light at the specified color.
+
+Parameters
+:
+color (Color) – Color of the light.
+
+../_images/pybricks_blockLightOnColor_primehub_off.svg
+
+light.off()¶
+Turns off the light.
+
+light.blink(color, durations)¶
+Blinks the light at a given color by turning it on and off for given durations.
+
+The light keeps blinking indefinitely while the rest of your program keeps running.
+
+This method provides a simple way to make basic but useful patterns. For more generic and multi-color patterns, use animate() instead.
+
+Parameters
+:
+color (Color) – Color of the light.
+
+durations (list) – Sequence of time values of the form [on_1, off_1, on_2, off_2, ...].
+
+light.animate(colors, interval)¶
+Animates the light with a sequence of colors, shown one by one for the given interval.
+
+The animation runs in the background while the rest of your program keeps running. When the animation completes, it repeats.
+
+Parameters
+:
+colors (list) – Sequence of Color values.
+
+interval (Number, ms) – Time between color updates.
+
+Using the light matrix display
+
+../_images/primehub_display.png
+display.orientation(up)¶
+Sets the orientation of the light matrix display.
+
+Only new displayed images and pixels are affected. The existing display contents remain unchanged.
+
+Parameters
+:
+top (Side) – Which side of the light matrix display is “up” in your design. Choose Side.TOP, Side.LEFT, Side.RIGHT, or Side.BOTTOM.
+
+../_images/pybricks_blockLightMatrixDo_light_matrix_off.svg
+
+display.off()¶
+Turns off all the pixels.
+
+../_images/pybricks_blockLightMatrixDo_light_matrix_pixel.svg
+
+display.pixel(row, column, brightness=100)¶
+Turns on one pixel at the specified brightness.
+
+Parameters
+:
+row (Number) – Vertical grid index, starting at 0 from the top.
+
+column (Number) – Horizontal grid index, starting at 0 from the left.
+
+brightness (Number brightness: %) – Brightness of the pixel.
+
+display.icon(icon)¶
+Displays an icon, represented by a matrix of brightness: % values.
+
+Parameters
+:
+icon (Matrix) – Matrix of intensities (brightness: %). A 2D list is also accepted.
+
+display.animate(matrices, interval)¶
+Displays an animation made using a list of images.
+
+Each image has the same format as above. Each image is shown for the given interval. The animation repeats forever while the rest of your program keeps running.
+
+Parameters
+:
+matrices (iter) – Sequence of Matrix of intensities.
+
+interval (Number, ms) – Time to display each image in the list.
+
+../_images/pybricks_blockLightMatrixDo_light_matrix_number.svg
+
+display.number(number)¶
+Displays a number in the range -99 to 99.
+
+A minus sign (-) is shown as a faint dot in the center of the display. Numbers greater than 99 are shown as >. Numbers less than -99 are shown as <.
+
+Parameters
+:
+number (int) – The number to be displayed.
+
+../_images/pybricks_blockLightMatrixDo_light_matrix_symbol.svg
+
+display.char(char)¶
+Displays a character or symbol on the light grid. This may be any letter (a–z), capital letter (A–Z) or one of the following symbols: !"#$%&'()*+,-./:;<=>?@[\]^_`{|}.
+
+Parameters
+:
+character (str) – The character or symbol to be displayed.
+
+display.text(text, on=500, off=50)¶
+Displays a text string, one character at a time, with a pause between each character. After the last character is shown, all lights turn off.
+
+Parameters
+:
+text (str) – The text to be displayed.
+
+on (Number, ms) – For how long a character is shown.
+
+off (Number, ms) – For how long the display is off between characters.
+
+Using the buttons
+
+../_images/primehub_buttons.png
+../_images/pybricks_blockButtonIsPressed_PrimeHub.svg
+
+buttons.pressed()→ Set[Button]¶
+Checks which buttons are currently pressed.
+
+Returns
+:
+Set of pressed buttons.
+
+../_images/pybricks_blockHubStopButton_PrimeHub.svg
+
+../_images/pybricks_blockHubStopButton_PrimeHub_none.svg
+
+system.set_stop_button(button)¶
+Sets the button or button combination that stops a running script.
+
+Normally, the center button is used to stop a running script. You can change or disable this behavior in order to use the button for other purposes.
+
+Parameters
+:
+button (Button) – A button such as Button.CENTER, or a tuple of multiple buttons. Choose None to disable the stop button altogether. If you do, you can still turn the hub off by holding the center button for three seconds.
+
+Using the IMU
+
+../_images/pybricks_blockImuStatus_PrimeHub_ready.svg
+
+imu.ready()→ bool¶
+Checks if the device is calibrated and ready for use.
+
+This becomes True when the robot has been sitting stationary for a few seconds, which allows the device to re-calibrate. It is False if the hub has just been started, or if it hasn’t had a chance to calibrate for more than 10 minutes.
+
+Returns
+:
+True if it is ready for use, False if not.
+
+../_images/pybricks_blockImuStatus_PrimeHub_stationary.svg
+
+imu.stationary()→ bool¶
+Checks if the device is currently stationary (not moving).
+
+Returns
+:
+True if stationary for at least a second, False if it is moving.
+
+../_images/pybricks_blockImuUp_PrimeHub.svg
+
+imu.up()→ Side¶
+Checks which side of the hub currently faces upward.
+
+Returns
+:
+Side.TOP, Side.BOTTOM, Side.LEFT, Side.RIGHT, Side.FRONT or Side.BACK.
+
+../_images/pybricks_blockTilt_PrimeHub_imu.tilt.pitch.svg
+
+../_images/pybricks_blockTilt_PrimeHub_imu.tilt.roll.svg
+
+imu.tilt()→ Tuple[int, int]¶
+Gets the pitch and roll angles. This is relative to the user-specified neutral orientation.
+
+The order of rotation is pitch-then-roll. This is equivalent to a positive rotation along the robot y-axis and then a positive rotation along the x-axis.
+
+Returns
+:
+Tuple of pitch and roll angles in degrees.
+
+../_images/pybricks_blockImuAcceleration_PrimeHub.svg
+
+imu.acceleration(axis)→ float: mm/s²¶
+imu.acceleration()→ vector: mm/s²
+Gets the acceleration of the device along a given axis in the robot reference frame.
+
+Parameters
+:
+axis (Axis) – Axis along which the acceleration should be measured.
+
+Returns
+:
+Acceleration along the specified axis. If you specify no axis, this returns a vector of accelerations along all axes.
+
+../_images/pybricks_blockImuRotation_PrimeHub_imu.angular_velocity.svg
+
+imu.angular_velocity(axis)→ float: deg/s¶
+imu.angular_velocity()→ vector: deg/s
+Gets the angular velocity of the device along a given axis in the robot reference frame.
+
+Parameters
+:
+axis (Axis) – Axis along which the angular velocity should be measured.
+
+Returns
+:
+Angular velocity along the specified axis. If you specify no axis, this returns a vector of accelerations along all axes.
+
+../_images/pybricks_blockImuGetHeading_PrimeHub.svg
+
+imu.heading()→ float: deg¶
+Gets the heading angle of your robot. A positive value means a clockwise turn.
+
+The heading is 0 when your program starts. The value continues to grow even as the robot turns more than 180 degrees. It does not wrap around to -180 like it does in some apps.
+
+Note
+
+For now, this method only keeps track of the heading while the robot is on a flat surface.
+
+This means that the value is no longer correct if you lift it from the table. To solve this, you can call reset_heading to reset the heading to a known value after you put it back down. For example, you could align your robot with the side of the competition table and reset the heading 90 degrees as the new starting point.
+
+Returns
+:
+Heading angle relative to starting orientation.
+
+../_images/pybricks_blockImuResetHeading_PrimeHub.svg
+
+imu.reset_heading(angle)¶
+Resets the accumulated heading angle of the robot.
+
+Parameters
+:
+angle (Number, deg) – Value to which the heading should be reset.
+
+../_images/pybricks_blockImuRotation_PrimeHub_imu.rotation.svg
+
+imu.rotation(axis)→ float: deg¶
+Gets the rotation of the device along a given axis in the robot reference frame.
+
+This value is useful if your robot only rotates along the requested axis. For general three-dimensional motion, use the orientation() method instead.
+
+The value starts counting from 0 when you initialize this class.
+
+Parameters
+:
+axis (Axis) – Axis along which the rotation should be measured.
+
+Returns
+:
+The rotation angle.
+
+imu.orientation()→ Matrix¶
+Gets the three-dimensional orientation of the robot in the robot reference frame.
+
+It returns a rotation matrix whose columns represent the X, Y, and Z axis of the robot.
+
+Note
+
+This method is not yet implemented.
+
+Returns
+:
+The rotation matrix.
+
+imu.settings(angular_velocity_threshold, acceleration_threshold)¶
+imu.settings()→ Tuple[float, float]
+Configures the IMU settings. If no arguments are given, this returns the current values.
+
+The angular_velocity_threshold and acceleration_threshold define when the hub is considered stationary. If all measurements stay below these thresholds for one second, the IMU will recalibrate itself.
+
+In a noisy room with high ambient vibrations (such as a competition hall), it is recommended to increase the thresholds slightly to give your robot the chance to calibrate. To verify that your settings are working as expected, test that the stationary() method gives False if your robot is moving, and True if it is sitting still for at least a second.
+
+Parameters
+:
+angular_velocity_threshold (Number, deg/s) – The threshold for angular velocity. The default value is 1.5 deg/s.
+
+acceleration_threshold (Number, mm/s²) – The threshold for angular velocity. The default value is 250 mm/s².
+
+Using the speaker
+
+speaker.volume(volume)¶
+speaker.volume()→ int: %
+Gets or sets the speaker volume.
+
+If no volume is given, this method returns the current volume.
+
+Parameters
+:
+volume (Number, %) – Volume of the speaker in the 0-100 range.
+
+awaitspeaker.beep(frequency=500, duration=100)¶
+Play a beep/tone.
+
+Parameters
+:
+frequency (Number, Hz) – Frequency of the beep in the 64-24000 Hz range.
+
+duration (Number, ms) – Duration of the beep. If the duration is less than 0, then the method returns immediately and the frequency play continues to play indefinitely.
+
+awaitspeaker.play_notes(notes, tempo=120)¶
+Plays a sequence of musical notes. For example: ["C4/4", "C4/4", "G4/4", "G4/4"].
+
+Each note is a string with the following format:
+
+The first character is the name of the note, A to G or R for a rest.
+
+Note names can also include an accidental # (sharp) or b (flat). B#/Cb and E#/Fb are not allowed.
+
+The note name is followed by the octave number 2 to 8. For example C4 is middle C. The octave changes to the next number at the note C, for example, B3 is the note below middle C (C4).
+
+The octave is followed by / and a number that indicates the size of the note. For example /4 is a quarter note, /8 is an eighth note and so on.
+
+This can optionally followed by a . to make a dotted note. Dotted notes are 1-1/2 times as long as notes without a dot.
+
+The note can optionally end with a _ which is a tie or a slur. This causes there to be no pause between this note and the next note.
+
+Parameters
+:
+notes (iter) – A sequence of notes to be played.
+
+tempo (int) – Beats per minute. A quarter note is one beat.
+
+Using connectionless Bluetooth messaging
+
+../_images/pybricks_blockBleBroadcast_PrimeHub.svg
+
+ble.broadcast(data)¶
+Starts broadcasting the given data on the broadcast_channel you selected when initializing the hub.
+
+Data may be of type int, float, str, bytes, True, or False, or a list thereof.
+
+Choose None to stop broadcasting. This helps improve performance when you don’t need the broadcast feature, especially when observing at the same time.
+
+The total data size is quite limited (26 bytes). True and False take 1 byte each. float takes 5 bytes. int takes 2 to 5 bytes depending on how big the number is. str and bytes take the number of bytes in the object plus one extra byte.
+
+When multitasking, only one task can broadcast at a time. To broadcast information from multiple tasks (or block stacks), you could use a dedicated separate task that broadcast new values when one or more variables change.
+
+Parameters
+:
+data – The value or values to be broadcast.
+
+New in version 3.3.
+
+../_images/pybricks_blockBleObserve_PrimeHub.svg
+
+ble.observe(channel)→ bool | int | float | str | bytes | tuple | None¶
+Retrieves the last observed data for a given channel.
+
+Receiving data is more reliable when the hub is not connected to a computer or other devices at the same time.
+
+Parameters
+:
+channel (int) – The channel to observe (0 to 255).
+
+Returns
+:
+The received data in the same format as it was sent, or None if no recent data is available.
+
+New in version 3.3.
+
+ble.signal_strength(channel)→ int: dBm¶
+Gets the average signal strength in dBm for the given channel.
+
+This indicates how near the broadcasting device is. Nearby devices may have a signal strength around -40 dBm, while far away devices might have a signal strength around -70 dBm.
+
+Parameters
+:
+channel (int) – The channel number (0 to 255).
+
+Returns
+:
+The signal strength or -128 if there is no recent observed data.
+
+New in version 3.3.
+
+ble.version()→ str¶
+Gets the firmware version from the Bluetooth chip.
+
+New in version 3.3.
+
+Using the battery
+
+../_images/pybricks_blockBatteryMeasure_PrimeHub_battery.voltage.svg
+
+battery.voltage()→ int: mV¶
+Gets the voltage of the battery.
+
+Returns
+:
+Battery voltage.
+
+../_images/pybricks_blockBatteryMeasure_PrimeHub_battery.current.svg
+
+battery.current()→ int: mA¶
+Gets the current supplied by the battery.
+
+Returns
+:
+Battery current.
+
+Getting the charger status
+
+charger.connected()→ bool¶
+Checks whether a charger is connected via USB.
+
+Returns
+:
+True if a charger is connected, False if not.
+
+charger.current()→ int: mA¶
+Gets the charging current.
+
+Returns
+:
+Charging current.
+
+charger.status()→ int¶
+Gets the status of the battery charger, represented by one of the following values. This corresponds to the battery light indicator right next to the USB port.
+
+Not charging (light is off).
+
+Charging (light is red).
+
+Charging is complete (light is green).
+
+There is a problem with the charger (light is yellow).
+
+Returns
+:
+Status value.
+
+System control
+
+system.name()→ str¶
+Gets the hub name. This is the name you see when connecting via Bluetooth.
+
+Returns
+:
+The hub name.
+
+system.storage(offset, write=)¶
+system.storage(offset, read=)→ bytes
+Reads or writes binary data to persistent storage.
+
+This lets you store data that can be used the next time you run the program.
+
+The data will be saved to flash memory when you turn the hub off normally. It will not be saved if the batteries are removed while the hub is still running.
+
+Once saved, the data will remain available even after you remove the batteries.
+
+Parameters
+:
+offset (int) – The offset from the start of the user storage memory, in bytes.
+
+read (int) – The number of bytes to read. Omit this argument when writing.
+
+write (bytes) – The bytes to write. Omit this argument when reading.
+
+Returns
+:
+The bytes read if reading, otherwise None.
+
+Raises
+:
+ValueError – If you try to read or write data outside of the allowed range.
+
+You can store up to 512 bytes of data on this hub.
+
+../_images/pybricks_blockHubShutdown_PrimeHub.svg
+
+system.shutdown()¶
+Stops your program and shuts the hub down.
+
+system.reset_reason()→ int¶
+Finds out how and why the hub (re)booted. This can be useful to diagnose some problems.
+
+Returns
+:
+0 if the hub was previously powered off normally.
+
+1 if the hub rebooted automatically, like after a firmware update.
+
+2 if the hub previously crashed due to a watchdog timeout, which indicates a firmware issue.
+
+Note
+
+The examples below use the PrimeHub class. The examples work fine on both hubs because they are the identical. If you prefer, you can change this to InventorHub.
+
+Status light examples¶
+Turning the light on and off¶
+from pybricks.hubs import PrimeHub
+from pybricks.parameters import Color
+from pybricks.tools import wait
+
+# Initialize the hub.
+hub = PrimeHub()
+
+# Turn the light on and off 5 times.
+for i in range(5):
+
+    hub.light.on(Color.RED)
+    wait(1000)
+
+    hub.light.off()
+    wait(500)
+Changing brightness and using custom colors¶
+from pybricks.hubs import PrimeHub
+from pybricks.parameters import Color
+from pybricks.tools import wait
+
+# Initialize the hub.
+hub = PrimeHub()
+
+# Show the color at 30% brightness.
+hub.light.on(Color.RED * 0.3)
+
+wait(2000)
+
+# Use your own custom color.
+hub.light.on(Color(h=30, s=100, v=50))
+
+wait(2000)
+
+# Go through all the colors.
+for hue in range(360):
+    hub.light.on(Color(hue))
+    wait(10)
+Making the light blink¶
+from pybricks.hubs import PrimeHub
+from pybricks.parameters import Color
+from pybricks.tools import wait
+
+# Initialize the hub
+hub = PrimeHub()
+
+# Keep blinking red on and off.
+hub.light.blink(Color.RED, [500, 500])
+
+wait(10000)
+
+# Keep blinking green slowly and then quickly.
+hub.light.blink(Color.GREEN, [500, 500, 50, 900])
+
+wait(10000)
+Creating light animations¶
+from pybricks.hubs import PrimeHub
+from pybricks.parameters import Color
+from pybricks.tools import wait
+from umath import sin, pi
+
+# Initialize the hub.
+hub = PrimeHub()
+
+# Make an animation with multiple colors.
+hub.light.animate([Color.RED, Color.GREEN, Color.NONE], interval=500)
+
+wait(10000)
+
+# Make the color RED grow faint and bright using a sine pattern.
+hub.light.animate([Color.RED * (0.5 * sin(i / 15 * pi) + 0.5) for i in range(30)], 40)
+
+wait(10000)
+
+# Cycle through a rainbow of colors.
+hub.light.animate([Color(h=i * 8) for i in range(45)], interval=40)
+
+wait(10000)
+Matrix display examples¶
+Displaying images¶
+from pybricks.hubs import PrimeHub
+from pybricks.tools import wait
+from pybricks.parameters import Icon
+
+# Initialize the hub.
+hub = PrimeHub()
+
+# Display a big arrow pointing up.
+hub.display.icon(Icon.UP)
+
+# Wait so we can see what is displayed.
+wait(2000)
+
+# Display a heart at half brightness.
+hub.display.icon(Icon.HEART / 2)
+
+# Wait so we can see what is displayed.
+wait(2000)
+Displaying numbers¶
+from pybricks.hubs import PrimeHub
+from pybricks.tools import wait
+
+# Initialize the hub.
+hub = PrimeHub()
+
+# Count from 0 to 99.
+for i in range(100):
+    hub.display.number(i)
+    wait(200)
+Displaying text¶
+from pybricks.hubs import PrimeHub
+from pybricks.tools import wait
+
+# Initialize the hub.
+hub = PrimeHub()
+
+# Display the letter A for two seconds.
+hub.display.char("A")
+wait(2000)
+
+# Display text, one letter at a time.
+hub.display.text("Hello, world!")
+Displaying individual pixels¶
+from pybricks.hubs import PrimeHub
+from pybricks.tools import wait
+
+# Initialize the hub.
+hub = PrimeHub()
+
+# Turn on the pixel at row 1, column 2.
+hub.display.pixel(1, 2)
+wait(2000)
+
+# Turn on the pixel at row 2, column 4, at 50% brightness.
+hub.display.pixel(2, 4, 50)
+wait(2000)
+
+# Turn off the pixel at row 1, column 2.
+hub.display.pixel(1, 2, 0)
+wait(2000)
+Changing the display orientation¶
+from pybricks.hubs import PrimeHub
+from pybricks.tools import wait
+from pybricks.parameters import Side
+
+# Initialize the hub.
+hub = PrimeHub()
+
+# Rotate the display. Now right is up.
+hub.display.orientation(up=Side.RIGHT)
+
+# Display a number. This will be shown sideways.
+hub.display.number(23)
+
+# Wait so we can see what is displayed.
+wait(10000)
+from pybricks.hubs import PrimeHub
+from pybricks.parameters import Icon
+from pybricks.tools import wait
+
+# Initialize the hub.
+hub = PrimeHub()
+
+while True:
+
+    # Check which side of the hub is up.
+    up_side = hub.imu.up()
+
+    # Use this side to set the display orientation.
+    hub.display.orientation(up_side)
+
+    # Display something, like an arrow.
+    hub.display.icon(Icon.UP)
+
+    wait(10)
+Making your own images¶
+from pybricks.hubs import PrimeHub
+from pybricks.tools import wait, Matrix
+
+# Initialize the hub.
+hub = PrimeHub()
+
+# Make a square that is bright on the outside and faint in the middle.
+SQUARE = Matrix(
+    [
+        [100, 100, 100, 100, 100],
+        [100, 50, 50, 50, 100],
+        [100, 50, 0, 50, 100],
+        [100, 50, 50, 50, 100],
+        [100, 100, 100, 100, 100],
+    ]
+)
+
+# Display the square.
+hub.display.icon(SQUARE)
+wait(3000)
+
+# Make an image using a Python list comprehension. In this image, the
+# brightness of each pixel is the sum of the row and column index. So the
+# light is faint in the top left and bright in the bottom right.
+GRADIENT = Matrix([[(r + c) for c in range(5)] for r in range(5)]) * 12.5
+
+# Display the generated gradient.
+hub.display.icon(GRADIENT)
+wait(3000)
+Combining icons to make expressions¶
+from pybricks.hubs import PrimeHub
+from pybricks.parameters import Icon, Side
+from pybricks.tools import wait
+
+from urandom import randint
+
+# Initialize the hub.
+hub = PrimeHub()
+hub.display.orientation(up=Side.RIGHT)
+
+while True:
+
+    # Start with random left brow: up or down.
+    if randint(0, 100) < 70:
+        brows = Icon.EYE_LEFT_BROW * 0.5
+    else:
+        brows = Icon.EYE_LEFT_BROW_UP * 0.5
+
+    # Add random right brow: up or down.
+    if randint(0, 100) < 70:
+        brows += Icon.EYE_RIGHT_BROW * 0.5
+    else:
+        brows += Icon.EYE_RIGHT_BROW_UP * 0.5
+
+    for i in range(3):
+        # Display eyes open plus the random brows.
+        hub.display.icon(Icon.EYE_LEFT + Icon.EYE_RIGHT + brows)
+        wait(2000)
+
+        # Display eyes blinked plus the random brows.
+        hub.display.icon(Icon.EYE_LEFT_BLINK * 0.7 + Icon.EYE_RIGHT_BLINK * 0.7 + brows)
+        wait(200)
+Displaying animations¶
+from pybricks.hubs import PrimeHub
+from pybricks.parameters import Icon
+from pybricks.tools import wait
+
+# Initialize the hub.
+hub = PrimeHub()
+
+# Turn the hub light off (optional).
+hub.light.off()
+
+# Create a list of intensities from 0 to 100 and back.
+brightness = list(range(0, 100, 4)) + list(range(100, 0, -4))
+
+# Create an animation of the heart icon with changing brightness.
+hub.display.animate([Icon.HEART * i / 100 for i in brightness], 30)
+
+# The animation repeats in the background. Here we just wait.
+while True:
+    wait(100)
+Button examples¶
+Detecting button presses¶
+from pybricks.hubs import PrimeHub
+from pybricks.parameters import Button, Icon
+from pybricks.tools import wait
+
+# Initialize the hub.
+hub = PrimeHub()
+
+# Wait for any button to be pressed, and save the result.
+pressed = []
+while not any(pressed):
+    pressed = hub.buttons.pressed()
+    wait(10)
+
+# Display a circle.
+hub.display.icon(Icon.CIRCLE)
+
+# Wait for all buttons to be released.
+while any(hub.buttons.pressed()):
+    wait(10)
+
+# Display an arrow to indicate which button was pressed.
+if Button.LEFT in pressed:
+    hub.display.icon(Icon.ARROW_LEFT_DOWN)
+elif Button.RIGHT in pressed:
+    hub.display.icon(Icon.ARROW_RIGHT_DOWN)
+elif Button.BLUETOOTH in pressed:
+    hub.display.icon(Icon.ARROW_RIGHT_UP)
+
+wait(3000)
+IMU examples¶
+Testing which way is up¶
+from pybricks.hubs import PrimeHub
+from pybricks.parameters import Color, Side
+from pybricks.tools import wait
+
+# Initialize the hub.
+hub = PrimeHub()
+
+# Define colors for each side in a dictionary.
+SIDE_COLORS = {
+    Side.TOP: Color.RED,
+    Side.BOTTOM: Color.BLUE,
+    Side.LEFT: Color.GREEN,
+    Side.RIGHT: Color.YELLOW,
+    Side.FRONT: Color.MAGENTA,
+    Side.BACK: Color.BLACK,
+}
+
+# Keep updating the color based on detected up side.
+while True:
+
+    # Check which side of the hub is up.
+    up_side = hub.imu.up()
+
+    # Change the color based on the side.
+    hub.light.on(SIDE_COLORS[up_side])
+
+    # Also print the result.
+    print(up_side)
+    wait(50)
+Reading the tilt value¶
+from pybricks.hubs import PrimeHub
+from pybricks.tools import wait
+
+# Initialize the hub.
+hub = PrimeHub()
+
+while True:
+    # Read the tilt values.
+    pitch, roll = hub.imu.tilt()
+
+    # Print the result.
+    print(pitch, roll)
+    wait(200)
+Using a custom hub orientation¶
+from pybricks.hubs import PrimeHub
+from pybricks.tools import wait
+from pybricks.parameters import Axis
+
+# Initialize the hub. In this case, specify that the hub is mounted with the
+# top side facing forward and the front side facing to the right.
+# For example, this is how the hub is mounted in BLAST in the 51515 set.
+hub = PrimeHub(top_side=Axis.X, front_side=-Axis.Y)
+
+while True:
+    # Read the tilt values. Now, the values are 0 when BLAST stands upright.
+    # Leaning forward gives positive pitch. Leaning right gives positive roll.
+    pitch, roll = hub.imu.tilt()
+
+    # Print the result.
+    print(pitch, roll)
+    wait(200)
+Reading acceleration and angular velocity vectors¶
+from pybricks.hubs import PrimeHub
+from pybricks.tools import wait
+
+# Initialize the hub.
+hub = PrimeHub()
+
+# Get the acceleration vector in g's.
+print(hub.imu.acceleration() / 9810)
+
+# Get the angular velocity vector.
+print(hub.imu.angular_velocity())
+
+# Wait so we can see what we printed
+wait(5000)
+Reading acceleration and angular velocity on one axis¶
+from pybricks.hubs import PrimeHub
+from pybricks.tools import wait
+from pybricks.parameters import Axis
+
+# Initialize the hub.
+hub = PrimeHub()
+
+# Get the acceleration or angular_velocity along a single axis.
+# If you need only one value, this is more memory efficient.
+while True:
+
+    # Read the forward acceleration.
+    forward_acceleration = hub.imu.acceleration(Axis.X)
+
+    # Read the yaw rate.
+    yaw_rate = hub.imu.angular_velocity(Axis.Z)
+
+    # Print the yaw rate.
+    print(yaw_rate)
+    wait(100)
+Bluetooth examples¶
+Broadcasting data to other hubs¶
+from pybricks.hubs import PrimeHub
+from pybricks.pupdevices import Motor
+from pybricks.parameters import Port
+from pybricks.tools import wait
+
+# Initialize the hub.
+hub = PrimeHub(broadcast_channel=1)
+
+# Initialize the motors.
+left_motor = Motor(Port.A)
+right_motor = Motor(Port.B)
+
+while True:
+    # Read the motor angles to be sent to the other hub.
+    left_angle = left_motor.angle()
+    right_angle = right_motor.angle()
+
+    # Set the broadcast data and start broadcasting if not already doing so.
+    data = (left_angle, right_angle)
+    hub.ble.broadcast(data)
+
+    # Broadcasts are only sent every 100 milliseconds, so there is no reason
+    # to call the broadcast() method more often than that.
+    wait(100)
+Observing data from other hubs¶
+from pybricks.hubs import PrimeHub
+from pybricks.pupdevices import Motor
+from pybricks.parameters import Color, Port
+from pybricks.tools import wait
+
+# Initialize the hub.
+hub = PrimeHub(observe_channels=[1])
+
+# Initialize the motors.
+left_motor = Motor(Port.A)
+right_motor = Motor(Port.B)
+
+while True:
+    # Receive broadcast from the other hub.
+
+    data = hub.ble.observe(1)
+
+    if data is None:
+        # No data has been received in the last 1 second.
+        hub.light.on(Color.RED)
+    else:
+        # Data was received and is less that one second old.
+        hub.light.on(Color.GREEN)
+
+        # *data* contains the same values in the same order
+        # that were passed to hub.ble.broadcast() on the
+        # other hub.
+        left_angle, right_angle = data
+
+        # Make the motors on this hub mirror the position of the
+        # motors on the other hub.
+        left_motor.track_target(left_angle)
+        right_motor.track_target(right_angle)
+
+    # Broadcasts are only sent every 100 milliseconds, so there is
+    # no reason to call the observe() method more often than that.
+    wait(100)
+System examples¶
+Changing the stop button combination¶
+from pybricks.hubs import PrimeHub
+from pybricks.parameters import Button
+
+# Initialize the hub.
+hub = PrimeHub()
+
+# Configure the stop button combination. Now, your program stops
+# if you press the center and Bluetooth buttons simultaneously.
+hub.system.set_stop_button((Button.CENTER, Button.BLUETOOTH))
+
+# Now we can use the center button as a normal button.
+while True:
+
+    # Play a sound if the center button is pressed.
+    if Button.CENTER in hub.buttons.pressed():
+        hub.speaker.beep()
+Turning the hub off¶
+from pybricks.hubs import PrimeHub
+from pybricks.tools import wait
+
+# Initialize the hub.
+hub = PrimeHub()
+
+# Say goodbye and give some time to send it.
+print("Goodbye!")
+wait(100)
+
+# Shut the hub down.
+hub.system.shutdown()
+© Copyright 2018-2023 The Pybricks Authors. Revision f35bbe44.
+
+Built with Sphinx using a theme provided by Read the Docs.
+LEGO, the LEGO logo, MINDSTORMS and the MINDSTORMS EV3 logo are trademarks and/or copyrights of the LEGO Group of companies which does not sponsor, authorize or endorse this site.
+Read the Docs
+ latest
+This is the latest development version
+Some features may not yet be available in the published stable version. Read the stable version of this documentation.
