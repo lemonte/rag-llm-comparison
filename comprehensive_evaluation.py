@@ -247,6 +247,14 @@ def analyze_similarity(csv_filename: str):
                 }
     
     print(f"  → Encontradas {len(results_by_question)} perguntas únicas")
+    
+    mistral_count = sum(1 for data in results_by_question.values() if data.get('mistral'))
+    gpt_count = sum(1 for data in results_by_question.values() if data.get('gpt'))
+    both_count = sum(1 for data in results_by_question.values() if data.get('mistral') and data.get('gpt'))
+    
+    print(f"  → Respostas do Mistral: {mistral_count}")
+    print(f"  → Respostas do GPT-4.1: {gpt_count}")
+    print(f"  → Perguntas com ambos os modelos: {both_count}")
     print(f"  → Inicializando Ollama Embeddings ({EMBEDDING_MODEL})...")
     
     ollama_embeddings = OllamaEmbeddings(model=EMBEDDING_MODEL)
@@ -270,17 +278,24 @@ def analyze_similarity(csv_filename: str):
     similarity_file.flush()
     
     total_compared = 0
+    skipped_no_data = 0
+    skipped_empty = 0
+    
     for pergunta, data in results_by_question.items():
         mistral_data = data.get('mistral')
         gpt_data = data.get('gpt')
         
         if not mistral_data or not gpt_data:
+            skipped_no_data += 1
             continue
         
-        resposta_mistral = mistral_data.get('resposta', '')
-        resposta_gpt = gpt_data.get('resposta', '')
+        resposta_mistral = mistral_data.get('resposta', '').strip()
+        resposta_gpt = gpt_data.get('resposta', '').strip()
         
         if not resposta_mistral or not resposta_gpt:
+            skipped_empty += 1
+            if total_compared == 0 and skipped_empty <= 3:
+                print(f"  ⚠️  Pulando questão {data['numero_questao']}: resposta vazia (Mistral: {len(resposta_mistral)} chars, GPT: {len(resposta_gpt)} chars)")
             continue
         
         print(f"  → Calculando similaridade para questão {data['numero_questao']}...")
@@ -309,6 +324,10 @@ def analyze_similarity(csv_filename: str):
     print("=" * 80)
     print("Análise de Similaridade Concluída!")
     print(f"Total de comparações: {total_compared}")
+    if skipped_no_data > 0:
+        print(f"Perguntas puladas (sem dados de ambos modelos): {skipped_no_data}")
+    if skipped_empty > 0:
+        print(f"Perguntas puladas (respostas vazias): {skipped_empty}")
     print(f"Arquivo salvo: {similarity_csv_filename}")
     print("=" * 80)
 

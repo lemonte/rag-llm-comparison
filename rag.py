@@ -2,10 +2,10 @@ import chromadb
 from chromadb.config import Settings
 from typing import List, Dict
 import os
-from langchain.text_splitter import RecursiveCharacterTextSplitter
+from langchain_text_splitters import RecursiveCharacterTextSplitter
 from langchain_community.embeddings import OllamaEmbeddings
 from langchain_community.vectorstores import Chroma
-from langchain.schema import Document
+from langchain_core.documents import Document
 from config import EMBEDDING_MODEL
 
 class RAGSystem:
@@ -62,8 +62,21 @@ class RAGSystem:
             )
             print(f"✓ Indexados {len(chunked_documents)} chunks de {len(documents)} documentos")
         except Exception as e:
-            print(f"Erro ao indexar documentos: {e}")
-            raise
+            error_msg = str(e)
+            if "already exists" in error_msg or "different settings" in error_msg:
+                print(f"  ⚠️  Instância existente detectada. Limpando e recriando...")
+                self.clear_collection()
+                self.vectorstore = Chroma.from_documents(
+                    documents=chunked_documents,
+                    embedding=ollama_embeddings,
+                    persist_directory=self.persist_directory,
+                    collection_name=self.collection_name,
+                    migrations=False
+                )
+                print(f"✓ Indexados {len(chunked_documents)} chunks de {len(documents)} documentos (após limpar)")
+            else:
+                print(f"Erro ao indexar documentos: {e}")
+                raise
     
     def retrieve_documents(self, query: str, n_results: int = 3) -> List[Dict]:
         if self.vectorstore is None:
