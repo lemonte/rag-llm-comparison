@@ -8,8 +8,11 @@ from config import (
     NUM_RETRIEVED_DOCS_SINGLE as NUM_RETRIEVED_DOCS,
     PROMPT_TEMPLATE,
     REFERENCE_URLS,
-    LOCAL_FILES
+    LOCAL_FILES,
+    OPENAI_API_KEY,
+    OPENAI_VECTOR_STORE_ID
 )
+from openai import OpenAI
 from scraper import scrape_multiple_urls, read_multiple_local_files
 from rag import RAGSystem
 from evaluation import llm_as_judge_evaluate_response, calculate_llm_judge_score
@@ -143,17 +146,45 @@ else:
                         try:
                             # Mede o tempo de geração
                             start_time = time.time()
-                            response = ollama.generate(
-                                model=OLLAMA_MODEL,
-                                prompt=prompt,
-                                stream=False,
-                                options={
-                                    "temperature": 0
-                                }
-                            )
-                            generation_time = time.time() - start_time
                             
-                            answer = response.get('response', '')
+                            if OLLAMA_MODEL == "openai-gpt-4.1":
+                                if not OPENAI_API_KEY:
+                                    st.error("OPENAI_API_KEY não configurada")
+                                    st.stop()
+                                
+                                client = OpenAI(api_key=OPENAI_API_KEY)
+                                
+                                response = client.responses.create(
+                                    model="gpt-4.1",
+                                    input=query,
+                                    tools=[{
+                                        "type": "file_search",
+                                        "vector_store_ids": [OPENAI_VECTOR_STORE_ID],
+                                        "max_num_results": NUM_RETRIEVED_DOCS
+                                    }],
+                                    include=["file_search_call.results"]
+                                )
+                                
+                                if hasattr(response, 'output') and response.output:
+                                    answer = response.output.strip()
+                                elif hasattr(response, 'text') and response.text:
+                                    answer = response.text.strip()
+                                elif hasattr(response, 'choices') and len(response.choices) > 0:
+                                    answer = response.choices[0].message.content.strip() if hasattr(response.choices[0].message, 'content') else str(response)
+                                else:
+                                    answer = str(response)
+                            else:
+                                response = ollama.generate(
+                                    model=OLLAMA_MODEL,
+                                    prompt=prompt,
+                                    stream=False,
+                                    options={
+                                        "temperature": 0
+                                    }
+                                )
+                                answer = response.get('response', '')
+                            
+                            generation_time = time.time() - start_time
                             
                             # Layout: Resposta com tempo ao lado
                             col1, col2 = st.columns([3, 1])

@@ -1,7 +1,7 @@
 import math
 from typing import List, Dict, Optional, Union, Tuple
 from openai import OpenAI
-from config import OPENAI_API_KEY
+from config import OPENAI_API_KEY, PROMPT_TEMPLATE
 
 # Configura o cliente OpenAI
 client = None
@@ -342,30 +342,16 @@ def llm_as_judge_evaluate_response(
         Se return_feedback=True: Tupla (nota: float, feedback: str)
     """
     if not answer or not question:
-        if return_feedback:
-            return 0.0, "Resposta ou pergunta vazia."
-        return 0.0
+        return 0
     
     if not client:
-        # Se não houver API key, retorna uma nota baseada no tamanho da resposta
-        # (fallback simples)
-        if len(answer) < 50:
-            score = 1.0
-        elif len(answer) < 200:
-            score = 2.5
-        else:
-            score = 3.5
-        
-        if return_feedback:
-            return score, "Avaliação automática baseada no tamanho da resposta (API key não configurada)."
-        return score
+        raise ValueError("Sem client")
     
     # Limita o tamanho do contexto para economia de tokens
     context_limited = context[:3000] if len(context) > 3000 else context
     answer_limited = answer[:2000] if len(answer) > 2000 else answer
     
-    if return_feedback:
-        prompt = f"""Você é um avaliador especializado em avaliar a qualidade de respostas geradas por sistemas RAG (Retrieval-Augmented Generation).
+    prompt = f"""Você é um avaliador especializado em avaliar a qualidade de respostas geradas por sistemas RAG (Retrieval-Augmented Generation).
 
 Sua tarefa é avaliar a qualidade da resposta final considerando:
 1. A pergunta original do usuário
@@ -380,6 +366,9 @@ CONTEXTO FORNECIDO (Documentos Recuperados):
 
 RESPOSTA GERADA:
 {answer_limited}
+
+PROMPT PARA GERAR A RESPOSTA:
+{PROMPT_TEMPLATE}
 
 Avalie a qualidade da resposta considerando:
 - **Relevância**: A resposta responde adequadamente à pergunta?
@@ -389,57 +378,21 @@ Avalie a qualidade da resposta considerando:
 - **Uso do contexto**: A resposta utiliza adequadamente as informações do contexto?
 
 Retorne sua avaliação no seguinte formato:
-NOTA: [número de 0 a 5]
+NOTA: [número de 1 a 5]
 FEEDBACK: [explicação detalhada do porquê dessa nota, mencionando pontos fortes e fracos]
 
 Onde a nota significa:
-- 0 = Resposta completamente inadequada, não responde à pergunta ou está incorreta
-- 1 = Resposta muito ruim, pouco relevante ou muito incompleta
-- 2 = Resposta ruim, parcialmente relevante mas com problemas significativos
-- 3 = Resposta adequada, responde à pergunta mas com algumas limitações
-- 4 = Resposta boa, relevante, precisa e bem estruturada
-- 5 = Resposta excelente, perfeitamente relevante, precisa, completa e clara"""
-    else:
-        prompt = f"""Você é um avaliador especializado em avaliar a qualidade de respostas geradas por sistemas RAG (Retrieval-Augmented Generation).
-
-Sua tarefa é avaliar a qualidade da resposta final considerando:
-1. A pergunta original do usuário
-2. O contexto fornecido (documentos recuperados)
-3. A resposta gerada pelo sistema
-
-PERGUNTA ORIGINAL DO USUÁRIO:
-{question}
-
-CONTEXTO FORNECIDO (Documentos Recuperados):
-{context_limited}
-
-RESPOSTA GERADA:
-{answer_limited}
-
-Avalie a qualidade da resposta considerando:
-- **Relevância**: A resposta responde adequadamente à pergunta?
-- **Precisão**: A resposta está correta e baseada no contexto fornecido?
-- **Completude**: A resposta é completa e abrangente?
-- **Clareza**: A resposta é clara e bem estruturada?
-- **Uso do contexto**: A resposta utiliza adequadamente as informações do contexto?
-
-Retorne APENAS um número de 0 a 5, onde:
-- 0 = Resposta completamente inadequada, não responde à pergunta ou está incorreta
-- 1 = Resposta muito ruim, pouco relevante ou muito incompleta
-- 2 = Resposta ruim, parcialmente relevante mas com problemas significativos
-- 3 = Resposta adequada, responde à pergunta mas com algumas limitações
+- 1 = Resposta muito ruim, inadequada ou incorreta
+- 2 = Resposta ruim, parcialmente relevante, com problemas significativos
+- 3 = Resposta adequada, responde à pergunta, mas com limitações
 - 4 = Resposta boa, relevante, precisa e bem estruturada
 - 5 = Resposta excelente, perfeitamente relevante, precisa, completa e clara
-
-Número (0-5):"""
+"""
     
     try:
         system_message = "Você é um avaliador objetivo e rigoroso de qualidade de respostas."
-        if return_feedback:
-            system_message += " Retorne a nota e um feedback detalhado explicando sua avaliação."
-        else:
-            system_message += " Retorne apenas números de 0 a 5."
-        
+        system_message += " Retorne a nota e um feedback detalhado explicando sua avaliação."
+
         response = client.chat.completions.create(
             model=model,
             messages=[
@@ -447,47 +400,31 @@ Número (0-5):"""
                 {"role": "user", "content": prompt}
             ],
             temperature=0,
-            max_tokens=500 if return_feedback else 10
+            max_tokens=500
         )
         
         result = response.choices[0].message.content.strip()
         
-        if return_feedback:
-            # Extrai nota e feedback
-            try:
-                lines = result.split('\n')
-                score = None
-                feedback = ""
-                
-                for line in lines:
-                    if line.upper().startswith('NOTA:'):
-                        score_str = line.split(':', 1)[1].strip()
-                        score = float(score_str.split()[0])
-                        score = max(0.0, min(5.0, score))
-                    elif line.upper().startswith('FEEDBACK:'):
-                        feedback = line.split(':', 1)[1].strip()
-                
-                # Se não encontrou no formato esperado, tenta extrair número
-                if score is None:
-                    score = float(result.split()[0])
-                    score = max(0.0, min(5.0, score))
-                    feedback = "Feedback não disponível."
-                
-                return round(score, 2), feedback
-            except Exception as e:
-                print(f"Erro ao extrair feedback: {e}")
-                return 2.5, "Erro ao gerar feedback."
-        else:
-            # Extrai apenas o número
-            try:
-                score = float(result.split()[0])
+        lines = result.split('\n')
+        score = None
+        feedback = ""
+        
+        for line in lines:
+            if line.upper().startswith('NOTA:'):
+                score_str = line.split(':', 1)[1].strip()
+                score = float(score_str.split()[0])
                 score = max(0.0, min(5.0, score))
-                return round(score, 2)
-            except (ValueError, IndexError):
-                return 2.5
+            elif line.upper().startswith('FEEDBACK:'):
+                feedback = line.split(':', 1)[1].strip()
+        
+        # Se não encontrou no formato esperado, tenta extrair número
+        if score is None:
+            score = float(result.split()[0])
+            score = max(0.0, min(5.0, score))
+            feedback = "Feedback não disponível."
+        
+        return round(score, 2), feedback
         
     except Exception as e:
         print(f"Erro ao avaliar resposta com LLM: {e}")
-        if return_feedback:
-            return 2.5, f"Erro ao avaliar: {str(e)}"
-        return 2.5
+        return 0, f"Erro ao avaliar: {str(e)}"

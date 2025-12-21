@@ -77,3 +77,6 @@ Sistema de Retrieval Augmented Generation (RAG) que permite fazer consultas sobr
 
 
 
+
+
+
