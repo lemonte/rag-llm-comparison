@@ -158,7 +158,7 @@ else:
                             # Layout: Resposta com tempo ao lado
                             col1, col2 = st.columns([3, 1])
                             with col1:
-                            st.subheader("📝 Resposta")
+                                st.subheader("📝 Resposta")
                             with col2:
                                 st.metric("⏱️ Tempo", f"{generation_time:.2f}s")
                             

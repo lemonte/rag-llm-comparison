@@ -100,12 +100,11 @@ class RAGSystem:
                     batch_num = (i // batch_size) + 1
                     if total_batches > 1:
                         print(f"  Adicionando batch {batch_num}/{total_batches} ({len(batch_chunks)} chunks)...")
-                    
-                self.collection.add(
+                    self.collection.add(
                         documents=batch_chunks,
                         ids=batch_ids,
                         metadatas=batch_metadatas
-                )
+                    )
                 
                 print(f"✓ Indexados {len(all_chunks)} chunks de {len(documents)} documentos")
             except Exception as e:
@@ -123,12 +122,11 @@ class RAGSystem:
                         batch_chunks = all_chunks[i:i + smaller_batch_size]
                         batch_ids = all_ids[i:i + smaller_batch_size]
                         batch_metadatas = all_metadatas[i:i + smaller_batch_size]
-                        
-                    self.collection.add(
+                        self.collection.add(
                             documents=batch_chunks,
                             ids=batch_ids,
                             metadatas=batch_metadatas
-                    )
+                        )
                     
                     print(f"✓ Indexados {len(all_chunks)} chunks de {len(documents)} documentos (após recriar coleção)")
                 except Exception as e2:

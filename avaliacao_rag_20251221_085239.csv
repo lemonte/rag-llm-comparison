@@ -1,0 +1,766 @@
+pergunta,resposta,latency_segundos,num_docs_recuperados,avg_proximidade,proximidades
+Quais são os parâmetros aceitos na inicialização do Prime Hub?,"top_side (Axis), front_side (Axis), broadcast_channel (opcional, número de canal entre 0 e 255)",9.0251,3,0.2586,0.2804;0.2491;0.2463
+Quais argumentos podem ser passados ao criar uma instância do Prime Hub?,Two arguments can be passed when creating an instance of the PrimeHub: top_side (Axis) and front_side (Axis).,5.6113,3,0.293,0.3126;0.2887;0.2776
+Que parâmetros são suportados ao instanciar o Prime Hub no Pybricks?,"The PrimeHub class in Pybricks supports the following parameters when initializing:
+- top_side (Axis)
+- front_side (Axis)
+- broadcast_channel (optional, channel number from 0 to 255)
+- observe_channels (optional, list of channels to observe data from other hubs)",7.7389,3,0.3053,0.3203;0.3112;0.2845
+Como funciona a inicialização do Prime Hub e quais opções podem ser configuradas?,"A inicialização do Prime Hub é feita através da classe `PrimeHub` na biblioteca Pybricks. Você pode especificar como o hub está posicionado em seu projeto, indicando a direção das faces superiores (com os botões) e frontais (com o porta USB). Por exemplo:
+```python
+from pybricks.hubs import PrimeHub
+
+hub = PrimeHub(top_side=Axis.Z, front_side=Axis.X)
+```
+A opção `broadcast_channel` também pode ser configurada para usar um canal de transmissão de dados específico. Por exemplo:
+```python
+hub = PrimeHub(top_side=Axis.Z, front_side=Axis.X, broadcast_channel=123)
+```",11.8416,3,0.3389,0.3566;0.3448;0.3153
+Como acender a luz de status do Prime Hub em uma cor específica?,"light.on('color')
+
+Replace 'color' with the desired color (e.g., 'red', 'green', 'blue', etc.) from the provided context.",5.9304,3,0.3636,0.3945;0.3574;0.3388
+De que forma é possível alterar a cor da luz de status do Prime Hub?,light.on(color),4.4532,3,0.3589,0.3735;0.3689;0.3343
+Como configurar a luz de status do Prime Hub para exibir uma cor desejada?,"light.on(color)
+
+Where `color` is the desired color (e.g., Color.RED, Color.GREEN, etc.).",5.6491,3,0.453,0.4883;0.4364;0.4345
+Qual é o método para ligar a luz de status do Prime Hub com uma cor específica?,light.on(color),3.4024,3,0.3021,0.3188;0.3106;0.2770
+Quais funcionalidades estão disponíveis no Prime Hub e como utilizá-las?,"O Prime Hub possui as seguintes funcionalidades:
+1. Inicialização do hub com a especificação da orientação (top_side e front_side).
+2. Transmissão de dados para outros dispositivos usando o canal de transmissão (broadcast_channel).
+3. Observação de dados recebidos em um determinado canal (observe).
+4. Medida da força do sinal do dispositivo que está transmitindo os dados (signal_strength).
+5. Ativação e desativação da luz do hub (light.on, light.off, light.blink).
+
+Para utilizar essas funcionalidades, você precisará importar a biblioteca pybricks. Por exemplo:
+```python
+from pybricks.hubs import PrimeHub
+
+# Inicialização do hub
+hub = PrimeHub()
+
+# Configuração da orientação do hub
+hub.top_side = Axis.Z
+hub.front_side = Axis.X
+
+# Transmissão de dados para outro dispositivo
+hub.broadcast(data)
+
+# Observação de dados recebidos em um determinado canal
+data = hub.observe(channel)
+
+# Medida da força do sinal do dispositivo que está transmitindo os dados
+strength = hub.signal_strength(channel)
+
+# Ativação e desativação da luz do hub
+hub.light.on(Color.RED)
+hub.light.off()
+hub.light.blink(Color.GREEN, durations)
+```",21.4967,3,0.2699,0.3056;0.2531;0.2511
+Quais recursos o Prime Hub oferece e como acessá-los no código?,"O Prime Hub oferece as seguintes funcionalidades:
+1. Broadcasting de dados (broadcast) - utilizando a função `st(awaitable.broadcast(data))`.
+2. Observação de canais (observe) - utilizando a função `ble.observe(channel)`.
+3. Detecção da posição do dispositivo (imu) - utilizando as funções `imu.stationary()`, `imu.up(calibrated=True)` e `imu.tilt(calibrated=True)`.
+
+Para acessar essas funcionalidades no código, basta importar o módulo `awaitable` para utilizar as funções de broadcast e observe, e o módulo `imu` para utilizar as funções de detecção da posição do dispositivo.",881.8465,3,0.2764,0.2861;0.2806;0.2624
+O que o Prime Hub é capaz de fazer e como usar suas funções?,"O Prime Hub pode transmitir dados em vários canais (0 a 255) e receber dados do mesmo canal. Para começar a transmitir dados, você precisa inicializar o hub especificando como ele está posicionado em sua design. Em seguida, use a função `broadcast()` para transmitir os dados desejados no canal selecionado. Para receber dados de um canal, use a função `observe()`. A função `signal_strength()` pode ser usada para obter a força do sinal em dBm do dispositivo que está transmitindo os dados no canal especificado.",11.2792,3,0.2576,0.2861;0.2457;0.2409
+Quais são as principais funcionalidades do Prime Hub e como aplicá-las na prática?,"The Prime Hub offers the following main functionalities:
+1. Broadcasting data using the `broadcast` function, which allows you to send information to other devices that are listening on the same channel.
+2. Observing channels using the `observe` function, which enables your program to receive data from other devices broadcasting on specific channels.
+3. Controlling the hub's status light using functions like `light_on`, `light_off`, and `blink`.
+
+In practice, you can use these functionalities as follows:
+1. To send data to other devices, call the `broadcast` function with the desired data as an argument. For example:
+```python
+hub = PrimeHub()  # Initialize the hub
+hub.broadcast(42)  # Broadcast the integer value 42
+```
+2. To listen for broadcasted data, specify the channels you want to observe in the `observe_channels` argument when initializing the hub, and use the `observe` function within your program to receive incoming data. For example:
+```python
+hub = PrimeHub(observe_channels=[0])  # Initialize the hub with channel 0 observed
+while True:
+    data = hub.ble.observe()  # Receive broadcasted data
+    print(""Received:"", data)  # Print the received data
+```
+3. To control the hub's status light, use functions like `light_on`, `light_off`, and `blink`. For example:
+```python
+hub = PrimeHub()  # Initialize the hub
+hub.light_on(Color.RED)  # Turn on the red light
+hub.light_off()  # Turn off the light
+hub.light_blink(Color.GREEN, [1000, 500])  # Blink green light for 1 second and then half a second
+```",22.2355,3,0.247,0.2664;0.2550;0.2196
+Como utilizar o Bluetooth do Prime Hub para enviar e receber dados?,"ble.broadcast(data) and ble.signal_strength(channel) are the functions used for sending and receiving data using Bluetooth on the Prime Hub. To send data, use `ble.broadcast(data)` where `data` is the information you want to transmit. To receive data, observe a specific channel with `ble.signal_strength(channel)`. The function returns the received data in the same format as it was sent or None if no recent data is available.",9.0345,3,0.4256,0.4381;0.4247;0.4139
+Como estabelecer comunicação via Bluetooth usando o Prime Hub?,"To establish communication via Bluetooth using the Prime Hub, you should first initialize it by importing the necessary library and creating an instance of the hub. After that, you can use the `ble.connect()` function to connect to a device. Here's a simple example:
+
+```python
+from pybricks.hubs import PrimeHub
+import ble
+
+# Initialize the Prime Hub
+hub = PrimeHub()
+
+# Connect to a Bluetooth device (replace 'device_address' with the actual address)
+hub.connect(ble.Address('device_address'))
+```",8.9651,3,0.4505,0.5050;0.4297;0.4166
+De que maneira o Bluetooth do Prime Hub pode ser usado para troca de dados?,"O Bluetooth do Prime Hub pode ser utilizado para troca de dados através da função `ble.broadcast(data)`. Essa função transmite os dados fornecidos no canal de transmissão selecionado ao inicializar o hub. Os dados podem ser de tipo int, float, str, bytes, True ou False, ou uma lista desses tipos. Para parar a transmissão, basta escolher None como argumento da função.",8.2323,3,0.3413,0.3635;0.3346;0.3259
+Qual é o processo para enviar e receber informações via Bluetooth no Prime Hub?,"ble.broadcast(data) - Starts broadcasting the given data on the selected channel.
+ble.signal_strength(channel) -> int - Receives the average signal strength in dBm for the given channel, indicating how near the broadcasting device is.
+ble.receive() -> (int|None) - Receives data sent via Bluetooth or returns None if no recent data is available.",5.6308,3,0.4643,0.4835;0.4740;0.4353
+Quais sensores podem ser conectados ao Prime Hub?,"The Prime Hub can connect sensors that use Bluetooth Low Energy (BLE) communication. However, specific details about which sensors are compatible with the Prime Hub are not provided in the context. It is recommended to check the Pybricks documentation or the sensor's manual for compatibility information.",6.8182,3,0.3741,0.3850;0.3726;0.3647
+Que tipos de sensores são compatíveis com o Prime Hub?,"The Prime Hub is compatible with sensors that can be observed using its ble.observe() function and broadcast data on specific channels. However, the provided context does not specify any particular types of sensors that are compatible with the Prime Hub.",6.0129,3,0.3361,0.3531;0.3329;0.3222
+Quais sensores o Prime Hub suporta para conexão direta?,"The Prime Hub supports Bluetooth connection for data broadcasting and has an IMU (Inertial Measurement Unit) sensor for pitch, roll, and orientation detection.",3.4195,3,0.3285,0.3565;0.3200;0.3089
+Quais dispositivos de sensor podem ser utilizados com o Prime Hub?,"Sensores que podem ser utilizados com o Prime Hub incluem acelerômetro, giroscópio e botões.",5.3691,3,0.3533,0.3636;0.3507;0.3456
+Como configurar o botão central do Prime Hub para executar uma função personalizada?,"To configure the center button of the Prime Hub to execute a custom function, you can use the `PrimeHub` class and specify the center button (`Button.CENTER`) as the stop button parameter with your desired custom function instead of the default one. Here's an example:
+
+```python
+from pybricks.parameters import Button
+from pybricks.hubs import PrimeHub
+
+# Initialize the hub and specify the center button for a custom function
+robot = PrimeHub(top_side=Axis.Z, front_side=Axis.X)
+robot.stop_button = Button.CENTER
+
+def custom_function():
+    # Your custom code here
+    pass
+
+# Run your custom function when the center button is pressed
+while True:
+    if robot.buttons[Button.CENTER].pressed():
+        custom_function()
+```",12.9281,3,0.2686,0.2763;0.2682;0.2615
+Como associar uma ação personalizada ao botão central do Prime Hub?,"To associate a custom action with the center button of the Prime Hub, you can use the `Button` class and specify the center button (`Button.CENTER`) as an argument in the method that handles the button press event. However, this functionality is not explicitly mentioned in the provided context. Here's an example of how you might do it:
+
+```python
+from pybricks.parameters import Button
+from pybricks.tools import wait
+
+def on_button_press(button):
+    # Your custom action goes here
+    print(""Custom action triggered!"")
+
+button = Button.CENTER
+button.whenPressed(on_button_press)
+```
+
+In this example, the function `on_button_press` is called whenever the center button is pressed. You can replace the print statement with your own custom code to perform a specific action when the button is pressed.",11.8457,3,0.2116,0.2291;0.2049;0.2009
+De que forma é possível programar o botão central para executar uma função específica?,"Para programar o botão central (Button.CENTER) para executar uma função específica, você pode utilizar um laço de repetição `while` e verificar se o botão está pressionado usando a função `hub.buttons.pressed()`. Por exemplo:
+
+```python
+from pybricks.hubs import PrimeHub
+
+# Initialize the hub.
+hub = PrimeHub()
+
+def executar_funcao():
+    # Código da função específica que você deseja executar.
+    pass
+
+while True:
+    if Button.CENTER in hub.buttons.pressed():
+        executar_funcao()
+```",9.8506,3,0.1139,0.1183;0.1150;0.1083
+Como capturar o evento do botão central do Prime Hub e executar código personalizado?,"To capture the event of the central button on the Prime Hub and execute custom code, you should use the `on_button_pressed` function. Here's an example:
+
+```python
+from pybricks.hubs import PrimeHub
+from pybricks.parameters import Button
+
+hub = PrimeHub()
+
+def on_button_pressed():
+    # Your custom code here
+    print(""Button pressed!"")
+
+hub.on_button_pressed(Button.CENTER, on_button_pressed)
+```
+
+In this example, the function `on_button_pressed` will be called whenever the central button is pressed. Replace the `print(""Button pressed!"")` with your custom code to perform specific actions when the button is pressed.",11.9485,3,0.2136,0.2177;0.2122;0.2109
+Como ler os valores do IMU (Unidade de Medida Inercial) do Prime Hub?,"imu.tilt(calibrated=True) → Tuple[int, int]
+
+This function retrieves the pitch and roll angles of the Prime Hub using calibrated gyroscope and accelerometer data. The returned value is a tuple containing two integers representing the pitch and roll values respectively.",7.422,3,0.2448,0.2528;0.2421;0.2394
+De que forma é possível acessar os dados do IMU no Prime Hub?,"To access the IMU data on the Prime Hub, you can use the `IMU` class provided by Pybricks. Here's an example of how to initialize and read the accelerometer data from the IMU:
+
+```python
+from pybricks.hubs import PrimeHub
+from pybricks.devices import IMU
+from pybricks.parameters import FieldOrientation
+
+# Initialize the hub and IMU device
+hub = PrimeHub()
+imu = IMU(hub)
+
+# Set the field orientation (optional)
+imu.field_orientation = FieldOrientation.FORWARD_UP_FRONT
+
+# Read the accelerometer data
+acceleration = imu.acceleration
+```
+
+In this example, `FieldOrientation.FORWARD_UP_FRONT` sets the orientation of the IMU to match a forward-facing robot with its upside pointing upwards. You can adjust this according to your specific setup.",14.4199,3,0.2673,0.2726;0.2721;0.2572
+Como obter informações de aceleração e rotação do IMU do Prime Hub?,"prime hubgetpitch, prime hubgetroll imu.tilt(calibrated=True) → Tuple[int, int]",5.7107,3,0.287,0.2961;0.2880;0.2767
+Qual é o método para ler os sensores inerciais do Prime Hub?,"prime\_hub.imu.ready() (if you need calibrated data) or prime\_hub.imu.accelerometer, prime\_hub.imu.gyroscope (for raw data)",4.8402,3,0.332,0.3399;0.3302;0.3260
+O que a função imu.heading() retorna e como utilizá-la corretamente?,"A função `imu.heading()` retorna o ângulo de rotação do seu robô em graus, com um valor positivo indicando uma virada em sentido horário. Para utilizar corretamente, basta chamar a função no código do seu robô. Por exemplo:
+```python
+heading_angle = imu.heading()
+print(""Heading angle:"", heading_angle, ""degrees"")
+```",8.884,3,0.1861,0.2091;0.1953;0.1541
+Qual é o valor retornado por imu.heading() e como interpretá-lo?,"The `imu.heading()` function returns the heading angle of your robot in degrees. A positive value means a clockwise turn from the starting orientation, which is 0 when your program starts. The value continues to grow even as the robot turns more than 180 degrees and does not wrap around to -180.",7.4325,3,0.1851,0.2000;0.1817;0.1738
+Para que serve a função imu.heading() e como usá-la no controle do robô?,"A função `imu.heading()` retorna o ângulo de rotação (heading) do robô em graus, com um valor positivo indicando uma virada em sentido horário. O ângulo é zero quando o programa começa e cresce a medida que o robô gira mais de 180 graus. Para o momento, esta função só rastreia o heading enquanto o robô está sobre uma superfície plana.
+
+Para usar a função `imu.heading()` no controle do robô, você pode chamá-la em qualquer ponto do seu código para obter o ângulo de rotação atual do robô. Por exemplo:
+```python
+import pybricks
+robot = pybricks.Hub()
+heading_angle = robot.imu.heading()
+print(""Heading angle:"", heading_angle, ""degrees"")
+```",13.0923,3,0.2052,0.2422;0.2086;0.1648
+Como funciona o imu.heading() e em quais situações ele deve ser utilizado?,"The `imu.heading()` function gets the heading angle of a robot, with positive values indicating clockwise turns. It returns the heading angle relative to the starting orientation. This function should be used when you want to know the current direction your robot is facing in terms of degrees. However, it only keeps track of the heading while the robot is on a flat surface. If the robot is lifted from the table, the value may no longer be correct. To reset the heading to a known value after putting it back down, you can call `imu.reset_heading()`.",7.3742,3,0.2215,0.2329;0.2270;0.2044
+Como configurar a exibição de números no display do Prime Hub?,"display.text(text, on=500, off=50)
+
+Explanation: The user wants to know how to configure the display of numbers on the Prime Hub. The provided context mentions the `display.text()` function which can be used to show a text string, one character at a time, with a pause between each character. This function can be used to display numbers as well.",8.2613,3,0.4622,0.4810;0.4581;0.4476
+Como mostrar valores numéricos no display do Prime Hub?,"display.text(str(number), on=500, off=50)
+
+Explanation: The user wants to know how to show numerical values on the Prime Hub's display. The context provides a function called `display.text()` which can be used to display text on the Prime Hub's screen. To display numbers, we need to convert them into strings first using the `str()` function and then pass this string as an argument to the `display.text()` function. The remaining parameters `on=500, off=50` control the duration for which each character is displayed and the time between characters respectively.",10.6564,3,0.3472,0.3852;0.3311;0.3254
+Qual é a forma correta de exibir números na tela do Prime Hub?,"The Prime Hub does not have a display to show numbers directly. However, you can send data to be observed using the `prime_hub.observe()` function and retrieve it later with `ble.observe()`. This retrieved data can then be used to control other devices or display the data elsewhere.",7.2475,3,0.2967,0.3179;0.2885;0.2838
+Como personalizar a exibição de números no display do Prime Hub?,"hub.display.number(text, on=ms, off=ms)
+
+Exemplo:
+```python
+from pybricks.hubs import PrimeHub
+from pybricks.tools import wait
+
+# Initialize the hub.
+hub = PrimeHub()
+
+# Display number 10 for two seconds.
+hub.display.number(10, on=2000, off=0)
+wait(2000)
+```",9.4618,3,0.3594,0.3901;0.3473;0.3410
+Como exibir uma animação na matriz de LEDs do Prime Hub?,"To display an animation on the matrix of LEDs (display) of the Prime Hub, you can create a sequence of matrices and use the `hub.display.icon()` function to update the display with each matrix in the sequence. Here's an example of creating a simple left-to-right scrolling animation:
+
+```python
+from pybricks.hubs import PrimeHub
+from pybricks.parameters import Icon, Side
+from pybricks.tools import wait
+
+# Initialize the hub.
+hub = PrimeHub()
+
+# Define the sequence of matrices for the animation.
+SCROLLING_ANIMATION = [
+    Matrix([[1, 1, 1, 1, 0],
+            [1, 1, 1, 0, 0],
+            [1, 1, 0, 0, 0],
+            [1, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0]]),
+    Matrix([[0, 1, 1, 1, 0],
+            [0, 1, 1, 0, 0],
+            [0, 1, 0, 0, 0],
+            [0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0]]),
+    Matrix([[0, 0, 1, 1, 0],
+            [0, 0, 1, 0, 0],
+            [0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0]]),
+    Matrix([[0, 0, 0, 1, 0],
+            [0, 0, 0, 1, 0],
+            [0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0]]),
+]
+
+# Update the display with each matrix in the sequence.
+for animation in SCROLLING_ANIMATION:
+    hub.display.icon(animation)
+    wait(1000)
+```
+
+In this example, `SCROLLING_ANIMATION` is a list of matrices representing the animation frames. The display updates with each matrix in the sequence every 1 second (1000 milliseconds). You can modify the matrices and timing to create different animations as needed.",33.0915,3,0.4129,0.4670;0.3890;0.3828
+De que forma é possível criar e mostrar animações na matriz de LEDs do Prime Hub?,"To create and display animations on the Prime Hub's matrix of LEDs, you can use Python lists to represent the desired patterns. Here's an example of creating a simple animation called ""blink"" that alternates between turning all LEDs on and off:
+
+```python
+# Initialize the hub
+hub = PrimeHub()
+
+# Define the blink pattern as a list of brightness levels (0-100) for each LED
+BLINK_PATTERN = [50, 0] * 25
+
+while True:
+    # Display the current pattern on the matrix
+    hub.display.icon(BLINK_PATTERN)
+
+    # Toggle the state of the animation (on -> off or off -> on)
+    for i in range(len(BLINK_PATTERN)):
+        if BLINK_PATTERN[i] == 50:
+            BLINK_PATTERN[i] = 0
+        else:
+            BLINK_PATTERN[i] = 50
+
+    # Wait for a short period before updating the pattern again
+    wait(100)
+```
+
+In this example, the `BLINK_PATTERN` list contains alternating values of 50 (on) and 0 (off) for each LED. The animation is created by cycling through the list and updating the state of each LED based on its current value. The `wait(100)` function call at the end of the loop causes the pattern to update every 100 milliseconds, creating a simple blinking effect.",20.1264,3,0.3593,0.4105;0.3353;0.3321
+Como programar uma sequência animada de LEDs no Prime Hub?,"From the provided context, it is possible to program an animated sequence of LEDs on the Prime Hub using Python. Here's a simple example that shows how to turn the light on and off 5 times, change brightness, use custom colors, and make the light blink.
+
+```python
+from pybricks.hubs import PrimeHub
+from pybricks.parameters import Color
+from pybricks.tools import wait
+
+# Initialize the hub.
+hub = PrimeHub()
+
+# Turn the light on and off 5 times.
+for i in range(5):
+    hub.light.on(Color.RED)
+    wait(1000)
+
+    hub.light.off()
+    wait(500)
+
+# Show the color at 30% brightness.
+hub.light.on(Color.RED * 0.3)
+wait(2000)
+
+# Use your own custom color.
+hub.light.on(Color(h=30, s=100, v=50))
+wait(2000)
+
+# Make the light blink (red and green).
+durations = [1000, 500]
+colors = [Color.RED, Color.GREEN]
+for color, duration in zip(colors, durations):
+    hub.light.on(color)
+    wait(duration)
+    hub.light.off()
+```
+
+This code initializes the Prime Hub, turns on and off the LED 5 times, shows a custom color at 30% brightness, uses a custom RGB color, and makes the light blink between red and green.",20.7232,3,0.3758,0.4256;0.3555;0.3464
+Qual é o processo para exibir animações no display de LEDs do Prime Hub?,"The context provided does not contain information about animations on the Prime Hub's LED display. However, it does provide functions for controlling the status light (not the LED display) such as turning it on, off, and blinking at different colors. To create animations on the LED display, you might need additional libraries or specific APIs that are not covered in the provided context.",7.0646,3,0.3884,0.4244;0.3722;0.3687
+Quais são as opções disponíveis para o controle da luz de status no Prime Hub?,"The available options for controlling the status light on the Prime Hub are:
+1. light.on(color) - Turns on the light at a specified color.
+2. light.off() - Turns off the light.
+3. light.blink(color, durations) - Blinks the light at a given color by turning it on and off for given durations.",6.8364,3,0.2515,0.2769;0.2617;0.2158
+Quais modos e configurações existem para a luz de status do Prime Hub?,"The Prime Hub's status light can be controlled using the following methods:
+- `light.on(color)`: Turns on the light at the specified color.
+- `light.off()`: Turns off the light.
+- `light.blink(color, durations)`: Blinks the light at a given color by turning it on and off for given durations.
+
+The available colors are not explicitly mentioned in the context, but they can be assumed to be common colors such as red, green, blue, yellow, etc., as these are typically used in programming for LED lights.
+
+The `broadcast_channel` and `observe_channels` parameters are related to Bluetooth communication and not directly to the status light.",10.5393,3,0.463,0.5054;0.4522;0.4316
+Como a luz de status do Prime Hub pode ser controlada e personalizada?,"A luz de status do Prime Hub pode ser controlada usando as funções `light.on(color)`, `light.off()` e `light.blink(color, durations)`. O parâmetro `color` define a cor da luz.",5.8584,3,0.2538,0.2644;0.2629;0.2340
+Quais recursos estão disponíveis para manipular a luz de status do Prime Hub?,"A Prime Hub possui os seguintes recursos para manipulação da luz de status:
+- light.on(color)
+- light.off()
+- light.blink(color, durations)
+- light.animate([Color.RED, Color.GREEN, Color.NONE], interval=500)",6.9577,3,0.3696,0.4017;0.3639;0.3431
+Como controlar um motor DC sem sensor de rotação?,"Use the `DCMotor` class from the Pybricks library, connecting it to the desired port and specifying the positive direction. Then, use the `dc()` function to rotate the motor at a given duty cycle (power). To stop the motor, use the `stop()` function.
+
+Example:
+```python
+from pybricks import DCMotor
+
+motor = DCMotor(port)  # Connect the motor to port
+motor.dc(50)           # Rotate the motor at 50% duty cycle (power)
+motor.stop()           # Stop the motor
+```",10.894,3,0.3453,0.3923;0.3686;0.2750
+De que forma é possível operar um motor DC sem encoder no Pybricks?,"Operar um motor DC sem encoder no Pybricks pode ser feito utilizando a classe `DCMotor` e o método `dc()`. Por exemplo, para girar um motor em sentido horário (frente) com 70% de potência, você pode usar:
+```python
+from pybricks.pupdevices import DCMotor
+from pybricks.parameters import Port
+from pybricks.tools import wait
+
+# Initialize a motor without rotation sensors on port A.
+example_motor = DCMotor(Port.A)
+
+# Make the motor go clockwise (forward) at 70% duty cycle (""70% power"").
+example_motor.dc(70)
+```",12.2992,3,0.379,0.3998;0.3891;0.3480
+Como acionar e controlar um motor DC sem feedback de rotação?,"Para ativar e controlar um motor DC sem feedback de rotação, você pode utilizar a classe `DCMotor` do Pybricks. Você precisará conectar o motor ao porto desejado e definir a direção positiva do motor. Em seguida, utilize o método `dc()` para controlar o motor com um valor de ciclo de trabalho (duty cycle). Por exemplo:
+
+```python
+from pybricks.pupdevices import DCMotor
+from pybricks.parameters import Port
+
+# Inicializar o motor no porto A e definir a direção positiva como CLOCKWISE
+motor = DCMotor(Port.A, positive_direction=Direction.CLOCKWISE)
+
+# Rotar o motor com 50% de ciclo de trabalho (duty cycle)
+motor.dc(50)
+```
+
+Para parar o motor, utilize o método `stop()`. O motor irá parar gradualmente devido à fricção:
+
+```python
+motor.stop()
+```",16.5619,3,0.3137,0.3387;0.3143;0.2881
+Quais técnicas podem ser usadas para controlar um motor DC sem sensor?,"A technique that can be used to control a DC motor without a rotation sensor is by using the `DCMotor` class from the Pybricks library. You can set the positive direction of the motor and rotate it at a given duty cycle (power) using the `dc(duty)` method, where `duty` is a number between -100.0 to 100. To stop the motor, you can use the `stop()` method.",6.4893,3,0.3106,0.3436;0.3011;0.2871
+Qual a diferença entre brake() e stop() ao parar um motor?,"The difference between `brake()` and `stop()` is that `brake()` passively brakes the motor, stopping it due to friction plus the voltage generated while the motor is still moving. On the other hand, `stop()` stops the motor and lets it spin freely, gradually stopping due to friction.",7.7672,3,0.366,0.4064;0.3793;0.3121
+O que muda entre usar brake() e stop() em um motor?,O brake() faz com que o motor pareça devido à fricção e à tensão gerada enquanto ele ainda se move. Já o stop() faz com que o motor pareça gradualmente devido apenas à fricção.,3.1543,3,0.3278,0.3619;0.3423;0.2792
+Quais são os efeitos de brake() e stop() no comportamento do motor?,"O comando `brake()` para o motor passivamente o frena, fazendo-o parar devido à fricção e ao voltagem gerada enquanto o motor ainda está em movimento. Já o comando `stop()` para o motor deixa-o girar livremente, fazendo-o parar gradualmente devido à fricção.",5.8551,3,0.399,0.4343;0.4199;0.3429
+Em que situações devo usar brake() ou stop() para interromper um motor?,"Em situações em que você deseja interromper um motor, use `stop()` se desejar deixá-lo girar livremente até parar gradualmente devido à fricção. Use `brake()` se deseja parar o motor de forma passiva, com a ajuda da fricção e do voltagem gerada enquanto o motor ainda está movendo-se.",6.3514,3,0.3778,0.4116;0.3883;0.3337
+Como usar um sensor de distância no Pybricks?,"To use a distance sensor in Pybricks, you first need to import the appropriate module and create an instance of the sensor. Here's an example using the Ultrasonic Sensor:
+
+```python
+from pybricks.pupdevices import UltrasonicSensor
+
+# Create an instance of the Ultrasonic Sensor connected to port 1 (S1)
+ultrasonic_sensor = UltrasonicSensor(1)
+```
+
+After creating the sensor instance, you can read the distance data using the `distance()` method:
+
+```python
+# Read the distance in centimeters
+distance_cm = ultrasonic_sensor.distance()
+```",11.4174,3,0.3464,0.3954;0.3260;0.3180
+De que forma é possível ler medições de um sensor de distância no Pybricks?,"To read measurements from a distance sensor in Pybricks, you can use the `DistanceSensor` class. Here's an example of how to create and use it:
+
+```python
+from pybricks.pupdevices import DistanceSensor
+
+# Create a new instance of the DistanceSensor
+sensor = DistanceSensor(port1, port2)  # Replace port1 and port2 with the appropriate ports connected to your sensor
+
+# Read the distance measurement
+distance_cm = sensor.get_distance()  # Returns the distance in centimeters
+```",7.6896,3,0.3097,0.3601;0.2927;0.2763
+Como configurar e utilizar um sensor de distância em projetos Pybricks?,"To use a distance sensor in Pybricks projects, you need to follow these steps:
+
+1. Import the necessary modules and devices:
+
+```python
+from pybricks.hubs import PrimeHub
+from pybricks.pupdevices import DistanceSensor
+```
+
+2. Initialize the hub and the distance sensor:
+
+```python
+hub = PrimeHub()
+distance_sensor = DistanceSensor(Port.S1, Port.S2)
+```
+
+3. Read the distance value from the sensor:
+
+```python
+distance_cm = distance_sensor.get_distance_centimeters()
+```
+
+4. Use the distance value in your program as needed.
+
+Here's a simple example that prints the distance value:
+
+```python
+while True:
+    print(distance_sensor.get_distance_centimeters())
+    wait(1000)  # Wait for 1 second before taking another measurement
+```",13.3106,3,0.4185,0.4753;0.3961;0.3840
+Qual é o procedimento para obter dados de um sensor de distância no Pybricks?,"To obtain data from a distance sensor in Pybricks, you can use the `pupdevices` module which includes the distance sensor. Here's an example of how to read data from a distance sensor:
+
+```python
+from pybricks.pupdevices import DistanceSensor
+
+# Initialize the distance sensor
+distance_sensor = DistanceSensor(DIGITAL_PORT_A, DIGITAL_PORT_B)
+
+# Read the distance in centimeters
+distance_cm = distance_sensor.get_distance()
+```
+
+In this example, `DistanceSensor` is a class from the `pupdevices` module that represents a distance sensor. The constructor takes two arguments: the digital port connected to the sensor's first pin and the digital port connected to the sensor's second pin. After initializing the sensor, you can call the `get_distance()` method to read the current distance in centimeters.",12.7605,3,0.3368,0.3707;0.3199;0.3198
+Quais sensores podem medir a inclinação do Prime Hub?,"The Prime Hub can measure inclination using its IMU (Inertial Measurement Unit), which combines data from the accelerometer and gyroscope.",5.5414,3,0.3988,0.4031;0.3973;0.3960
+Que sensores permitem detectar inclinação no Prime Hub?,"The Prime Hub has an IMU (Inertial Measurement Unit) that allows it to detect pitch and roll angles. Specifically, the methods `imu.tilt(calibrated=True)` returns a tuple containing the pitch and roll angles.",4.3141,3,0.4134,0.4233;0.4110;0.4061
+Como o Prime Hub mede inclinação e quais sensores estão envolvidos?,The Prime Hub measures tilt using the gyroscope sensor.,4.5497,3,0.3427,0.3490;0.3446;0.3345
+Quais componentes são usados para identificar a inclinação do Prime Hub?,"The Prime Hub does not have built-in components to identify its inclination, as per the provided context.",5.4533,3,0.2996,0.3224;0.2892;0.2873
+Como medir a força aplicada com um sensor de força no Pybricks?,"To measure force with a Force Sensor in Pybricks, you would first need to connect the sensor to an available port on your hub. After that, you can use the `ForceSensor` class from the `pupdevices` module. Here's a simple example:
+
+```python
+from pybricks.pupdevices import ForceSensor
+
+# Create a new instance of the Force Sensor connected to port 1
+force_sensor = ForceSensor(1)
+
+# Read the force value (unit: Newtons)
+force = force_sensor.value()
+print(""Force applied:"", force, ""N"")
+```",10.671,3,0.2646,0.3274;0.2465;0.2199
+Como obter leituras de força usando um sensor de força no Pybricks?,"To obtain force readings using a Force Sensor in Pybricks, you should first import the necessary module and create an instance of the ForceSensor class. After that, you can use the `force` method to get the current force applied on the sensor. Here's an example:
+
+```python
+from pybricks.pupdevices import ForceSensor
+
+sensor = ForceSensor(port)  # Replace 'port' with the appropriate port number
+
+# To get the current force reading
+force = sensor.force()
+print(""Force:"", force)
+```",6.2657,3,0.3137,0.3874;0.2886;0.2652
+De que maneira o Pybricks permite medir força aplicada em um sensor?,"Pybricks does not provide a direct method to measure force applied on a sensor. However, it offers acceleration and angular velocity sensors (IMU) that can be used to infer force indirectly by calculating the change in acceleration or angular velocity over time. For example, if an object is attached to a motor and the motor applies a force, the acceleration of the object will change accordingly.",6.7362,3,0.2254,0.2867;0.1963;0.1932
+Qual é a forma correta de acessar os dados de um sensor de força no Pybricks?,"To access data from a force sensor in Pybricks, you would first need to initialize the sensor and then read its value. However, the provided context does not specify how to do this for a force sensor. It only mentions motors without rotation sensors and other devices like tilt sensors, infrared sensors, color and distance sensors, etc.
+
+Therefore, I'm unable to provide a specific answer on how to access data from a force sensor using the information given in the context.",7.9954,3,0.3004,0.3748;0.2807;0.2457
+Como transmitir dados entre dois Prime Hubs usando Bluetooth?,"The provided context does not contain information on how to transmit data between two Prime Hubs using Bluetooth. Therefore, I'm unable to answer your question with the given context.",5.9403,3,0.4259,0.4619;0.4214;0.3945
+Como configurar a comunicação Bluetooth entre dois Prime Hubs?,The provided context does not contain information on how to configure Bluetooth communication between two Prime Hubs.,3.9483,3,0.4775,0.5020;0.4668;0.4637
+De que forma dois Prime Hubs podem trocar informações via Bluetooth?,"Prime Hubs can exchange information via Bluetooth using connectionless Bluetooth messaging. One device can broadcast data on a specific channel, and the other device can observe that same channel to receive the data. The `ble.broadcast()` function is used for broadcasting data, and the `ble.observe(channel)` function is used for receiving data.",6.5951,3,0.4739,0.4997;0.4748;0.4472
+Qual é o método para enviar dados de um Prime Hub para outro usando Bluetooth?,ble.broadcast(data),0.9649,3,0.391,0.4174;0.3847;0.3709
+O que é ble.signal_strength() e como usá-lo?,"`ble.signal_strength(channel)` is a function that gets the average signal strength in dBm for the given channel on Prime Hub. It indicates how near the broadcasting device is. The function takes an integer parameter `channel` (0 to 255). The returned value is the signal strength or -128 if there is no recent observed data. To use it, simply call the function with the desired channel number as an argument:
+
+```python
+signal_strength = ble.signal_strength(channel)
+```",8.6948,3,0.3812,0.4421;0.4198;0.2816
+Para que serve a função ble.signal_strength() no Pybricks?,A função `ble.signal_strength()` no Pybricks é usada para obter a força média do sinal em dBm para o canal especificado. Isso indica quanto mais próximo está o dispositivo de transmissão.,4.6032,3,0.4117,0.4377;0.4199;0.3773
+Como interpretar e utilizar o valor retornado por ble.signal_strength()?,"The value returned by `ble.signal_strength(channel)` represents the average signal strength in dBm for the given channel, indicating how near the broadcasting device is. A nearby device may have a signal strength around -40 dBm, while far away devices might have a signal strength around -70 dBm.",5.0678,3,0.3347,0.3975;0.3705;0.2359
+Em quais casos o ble.signal_strength() pode ser útil em projetos Bluetooth?,"O método `ble.signal_strength()` é útil em projetos Bluetooth quando se precisa saber a distância aproximada entre o dispositivo de transmissão e o hub, pois ele retorna a força do sinal em dBm para o canal especificado.",6.4139,3,0.5003,0.5997;0.4901;0.4112
+Como armazenar e recuperar dados na memória persistente do Prime Hub?,"system.storage(offset, write=bytes) para armazenar dados na memória persistente do Prime Hub.
+system.storage(offset, read=) → bytes para recuperar os dados armazenados.",6.2674,3,0.3345,0.3691;0.3202;0.3141
+Como salvar informações de forma persistente no Prime Hub?,"The Prime Hub does not have built-in functionality for saving data persistently. It is designed to receive, process, and transmit data temporarily during a program's execution. If you need to save data long-term, consider using an external storage device or cloud service.",6.6868,3,0.3308,0.3615;0.3186;0.3124
+De que maneira é possível gravar e ler dados da memória do Prime Hub?,"Para gravar e ler dados na memória do Prime Hub, você pode utilizar a função `write` e `read`, respectivamente. A função `write` permite escrever bytes em uma determinada posição da memória, enquanto que a função `read` permite ler os bytes de uma determinada posição da memória.
+
+Exemplo:
+```python
+from pybricks.hubs import PrimeHub
+
+# Inicializa o hub
+hub = PrimeHub()
+
+# Define os dados que serão gravados na memória
+data_to_write = b'Meus dados'
+
+# Grava os dados na memória do hub
+hub.storage.write(offset=0, write=data_to_write)
+
+# Lê os dados da memória do hub
+read_data = hub.storage.read(offset=0, read=len(data_to_write))
+print('Dados lidos:', read_data.decode())
+```",14.8309,3,0.1995,0.2093;0.2058;0.1835
+Qual é o processo para armazenar dados que persistem após reinicialização do Prime Hub?,"The process for storing data that persists after reinitialization of the Prime Hub is by using the `system.storage()` function. You can write or read data within a range of 512 bytes. For example, to write data:
+
+```python
+data_to_store = b'Your data here'
+system.storage(offset=0, write=data_to_store)
+```
+
+And to read data:
+
+```python
+read_data = system.storage(offset=0, read=len(data_to_store))
+```",10.2182,3,0.2544,0.2711;0.2469;0.2451
+Como verificar a voltagem da bateria do Prime Hub?,battery.voltage(),4.5752,3,0.2788,0.2887;0.2857;0.2619
+Como obter a tensão atual da bateria do Prime Hub?,"The context provided does not contain information about obtaining the battery voltage of the Prime Hub. Therefore, I'm unable to provide an answer using only the given context.",5.6239,3,0.2304,0.2403;0.2278;0.2231
+De que forma é possível monitorar a voltagem da bateria no Prime Hub?,battery.voltage(),4.2738,3,0.2454,0.2672;0.2365;0.2326
+Qual comando permite verificar o nível de voltagem da bateria do Prime Hub?,battery.voltage(),3.3834,3,0.2467,0.2611;0.2572;0.2220
+Como saber se o Prime Hub está sendo carregado?,"The context does not provide information on how to check if the Prime Hub is charging. However, it mentions that the hub can broadcast data, and one of the parameters for the broadcast function is `None`, which could potentially be used to indicate that the hub is not connected or charging. To confirm this, you would need to refer to the Pybricks documentation or source code for more specific details on how to interpret the broadcasted data.",8.2779,3,0.2084,0.2152;0.2150;0.1949
+Como identificar se o Prime Hub está conectado ao carregador?,"There is no information provided on how to identify if the Prime Hub is connected to a charger. The context only discusses functions related to the hub's orientation, stationarity, and data retrieval.",4.9696,3,0.289,0.3110;0.2873;0.2687
+Existe uma forma de verificar o estado de carregamento do Prime Hub?,"No, there is no built-in function in the provided context to check the charging state of the Prime Hub.",3.1704,3,0.3085,0.3421;0.2951;0.2885
+Como detectar via código se o Prime Hub está em processo de carga?,"The context provided does not contain information on how to detect if the Prime Hub is in the process of charging. However, it provides functions for observing channels and broadcasting data, which could potentially be used to create a custom solution for this purpose. For example, you might set up a system where the charging device sends specific data through a designated channel when it's connected and charging, and then check that channel periodically using `hub.ble.observe()`. If the observed data matches the expected value for charging, then the Prime Hub is in the process of charging. Keep in mind this is just an example and would require additional development to implement effectively.",10.1431,3,0.2603,0.2824;0.2573;0.2412
+Quais são os motivos que podem levar o Prime Hub a reiniciar?,"The Prime Hub may restart due to changes in the broadcasted data or when observing new values on a channel. However, the provided context does not specify any other reasons for automatic restarts.",5.9807,3,0.2126,0.2278;0.2057;0.2043
+O que pode causar reinicializações inesperadas no Prime Hub?,"Reiniciações inesperadas no Prime Hub podem ser causadas por um problema de firmware ou uma falha na execução do programa. Isso pode ser diagnosticado com a função `system.reset_reason()`. A saída dessa função é 0 se o hub foi desligado normalmente, 1 se houve reinicialização automática após atualização de firmware e 2 se houve reinicialização devido a um timeout do watchdog, indicando uma falha no firmware.",8.9084,3,0.2366,0.2605;0.2308;0.2183
+Quais fatores fazem o Prime Hub reiniciar automaticamente?,O Prime Hub não reinicia automaticamente. Ele precisa ser reiniciado manualmente através da função `system.reset()` ou `system.shutdown()`.,3.4258,3,0.2507,0.2581;0.2508;0.2432
+Em quais situações o Prime Hub pode acabar reiniciando?,O Prime Hub pode reiniciar automaticamente após uma atualização de firmware ou se houver um problema de firmware (watchdog timeout).,4.5304,3,0.2484,0.2563;0.2455;0.2434
+Como programar um robô para andar em linha reta usando o Pybricks?,"To make a robot move in a straight line using Pybricks, you need to control the motors. Here's an example of how to do it with a Prime Hub or Inventor Hub:
+
+1. First, import the necessary modules:
+
+```python
+from pybricks.pupdevices import Motor, TouchSensor
+from pybricks.parameters import Port
+```
+
+2. Initialize the motors and touch sensor (optional for stopping the robot):
+
+```python
+left_motor = Motor(Port.A)
+right_motor = Motor(Port.B)
+touch_sensor = TouchSensor(Port.S1)
+```
+
+3. Define a function to move the motors and make the robot drive forward:
+
+```python
+def drive_forward(speed):
+    left_motor.run_forever(speed=speed)
+    right_motor.run_forever(speed=-speed)
+```
+
+4. Define a function to stop the motors:
+
+```python
+def stop():
+    left_motor.stop()
+    right_motor.stop()
+```
+
+5. Add a loop that checks if the touch sensor is pressed and stops the robot when it is:
+
+```python
+while True:
+    if touch_sensor.is_pressed():
+        stop()
+    else:
+        drive_forward(100)  # Adjust speed as needed
+```
+
+6. Finally, call the `drive_forward` function to start moving the robot:
+
+```python
+drive_forward(100)
+```",20.3577,3,0.2691,0.2971;0.2634;0.2469
+Como fazer um robô se deslocar em linha reta no Pybricks?,"To make a robot move in a straight line using Pybricks, you need to use a motor with rotation sensor and control its rotation. Here's an example of how to do it:
+
+```python
+from pybricks.pupdevices import Motor, ColorSensor, TouchSensor
+from pybricks.parameters import Port
+
+# Initialize the motor and rotation sensor
+motor = Motor(Port.A)
+rotation_sensor = Motor(Port.B)
+rotation_sensor.wheel_diameter = 50.24  # Set the wheel diameter in millimeters
+
+# Create a touch sensor to detect when the robot hits an obstacle
+touch_sensor = TouchSensor(Port.S1)
+
+# Initialize variables for storing the motor power and rotation
+motor_power = 500
+rotation = 0
+
+while True:
+    # Rotate the motor continuously
+    motor.run_forever(power=motor_power)
+
+    # Read the rotation sensor value
+    rotation = rotation_sensor.rotation()
+
+    # If the touch sensor is pressed, stop the motor and break the loop
+    if touch_sensor.is_pressed():
+        motor.stop()
+        break
+```
+
+In this example, the robot will move forward as long as it doesn't hit an obstacle detected by the touch sensor. You can adjust the `motor_power` variable to control the speed of the robot.",15.208,3,0.2698,0.3072;0.2704;0.2318
+Quais técnicas podem ser usadas para manter o robô andando reto no Pybricks?,"To keep the robot moving straight in Pybricks, you can use motor control techniques such as setting equal power levels for both motors or using rotation sensors to adjust the motor speeds based on the rotation difference. However, the provided context does not specify any particular technique for maintaining a straight path. It only mentions the availability of motors without and with rotation sensors. To find more specific information about controlling the robot's movement, you may need to refer to additional resources or documentation.",8.2217,3,0.2788,0.2921;0.2752;0.2689
+Como controlar os motores para garantir movimento em linha reta no Pybricks?,"Para garantir movimento em linha reta nos motores do Pybricks, você pode utilizar a função `dc()` para definir o nível de potência desejado e manter-lo constante. Porém, para uma trajetória precisa, é necessário controlar os motores em paralelo e sincronizá-los adequadamente.
+
+Aqui está um exemplo básico de como fazer um robô andar reto:
+
+```python
+from pybricks.pupdevices import Motor, ColorSensor
+from pybricks.parameters import Port
+from pybricks.tools import wait
+
+# Inicializa os motores esquerdo e direito
+left_motor = Motor(Port.A)
+right_motor = Motor(Port.B)
+
+# Inicializa o sensor de cor para detecção da linha branca
+sensor = ColorSensor(Port.S1)
+
+# Define a função para controlar os motores
+def drive_straight():
+    # Defina um nível de potência para ambos os motores
+    left_motor.dc(50)
+    right_motor.dc(50)
+
+    # Enquanto a cor detectada for branca, o robô continua andando
+    while sensor.color() == Color.WHITE:
+        pass
+
+# Inicia o movimento reto
+drive_straight()
+```
+
+Neste exemplo, os motores esquerdo e direito são controlados para andar em paralelo com a mesma potência (50%). O sensor de cor é utilizado para detectar quando o robô sai da linha branca e interromper o movimento.",22.2804,3,0.3782,0.3972;0.3800;0.3573
+Como fazer um robô girar em torno do próprio eixo no Pybricks?,"To make a robot rotate around its own axis in Pybricks, you would need a motor with rotation sensor. However, the provided context only includes motors without rotation sensors. To achieve this, you can use two motors connected to opposite wheels and control them simultaneously to create a rotational motion. Here's an example:
+
+```python
+from pybricks.pupdevices import Motor, ColorSensor, TouchSensor
+from pybricks.parameters import Port
+from pybricks.tools import wait
+
+# Initialize the motors.
+left_motor = Motor(Port.A)
+right_motor = Motor(Port.B)
+
+# Choose the ""power"" level for your robot. Negative means reverse.
+left_motor.dc(-50)
+right_motor.dc(50)
+
+# Keep doing nothing. The robot will rotate.
+while True:
+    wait(1000)
+```
+
+In this example, the left motor is set to reverse rotation and the right motor is set to forward rotation. This causes the robot to spin in a clockwise direction. You can adjust the power level to control the speed of rotation.",15.6822,3,0.2279,0.2801;0.2208;0.1827
+Como programar uma rotação no próprio eixo usando o Pybricks?,"To rotate a motor on its own axis using Pybricks, you can use the `steering` function for motors that have rotation sensors. Here's an example:
+
+```python
+from pybricks.pupdevices import Motor
+
+motor = Motor(port)  # Replace 'port' with the motor port number
+
+# Set the target angle in degrees
+target_angle = 90
+
+# Calculate the number of steps required to reach the target angle
+steps = int((target_angle / 360) * motor.get_angle_resolution())
+
+# Rotate the motor to the target angle
+motor.steering(steps, Motor.Steering.RIGHT if target_angle > 0 else Motor.Steering.LEFT)
+```",11.6501,3,0.2627,0.2805;0.2786;0.2290
+De que forma é possível fazer o robô girar parado no Pybricks?,"To make the robot spin in place using Pybricks, you can use a motor with rotation sensors and control its rotation directly. Here's an example using the `example_motor` from the provided context:
+
+```python
+from pybricks.pupdevices import Motor
+
+# Initialize the motor
+motor = Motor(port.A)
+
+# Set the target rotation (e.g., 360 degrees for a full circle)
+target_rotation = 360
+
+# Spin the motor in place
+while motor.rotation(Motor.RUN_USING_ENCODER) < target_rotation:
+    pass
+
+# Stop the motor
+motor.stop()
+```",10.9187,3,0.2504,0.2721;0.2610;0.2182
+Como controlar os motores para realizar um giro no próprio eixo no Pybricks?,"To make a motor rotate around its own axis in Pybricks, you can use the `steer()` function. This function allows you to control the rotation of the motor by adjusting the duty cycle for each side of the motor (A and B). Here's an example:
+
+```python
+from pybricks.pupdevices import DCMotor
+from pybricks.parameters import Port
+from pybricks.tools import wait
+
+# Initialize the motor.
+motor = DCMotor(Port.A)
+
+# Function to make the motor rotate clockwise.
+def rotate_clockwise():
+    motor.steer(50, 100)
+
+# Function to make the motor rotate counter-clockwise.
+def rotate_counter_clockwise():
+    motor.steer(-50, 100)
+
+# Rotate clockwise for a while.
+rotate_clockwise()
+wait(1000)
+
+# Stop the motor.
+motor.stop()
+wait(1000)
+
+# Rotate counter-clockwise for a while.
+rotate_counter_clockwise()
+wait(1000)
+
+# Keep the motor stopped.
+motor.stop()
+```
+
+In this example, `rotate_clockwise()` and `rotate_counter_clockwise()` are functions that set the duty cycle for each side of the motor to rotate clockwise or counter-clockwise, respectively. The motor is then stopped after a delay of 1000 milliseconds (1 second) using the `stop()` function.",21.285,3,0.4068,0.4314;0.3995;0.3895
+THROUGHPUT,,0.0367,,,
