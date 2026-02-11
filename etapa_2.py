@@ -1,13 +1,13 @@
-MODELOS_EXECUTAR = ["mistral", "neural-chat"]
+MODELOS_EXECUTAR = ["llama3.2", "llama3:70b", "mistral","deepseek-r1"]
 CHUNK_SIZES = [1000, 1200]
 CHUNK_OVERLAPS = [100, 200]
-K_DOCUMENTS_LIST = [3, 4]
+K_DOCUMENTS_LIST = [2, 3]
 
 import time
 import csv
 from datetime import datetime
 from itertools import product
-from common.config import DOCUMENT_URLS, LOCAL_FILES, PERGUNTAS_TESTE_2, PROMPT_TEMPLATE, get_chromadb_folder
+from common.config import DOCUMENT_URLS, LOCAL_FILES, PERGUNTAS_TESTE_2, PROMPT_TEMPLATE_2, get_chromadb_folder
 from common.document_processor import fetch_and_process_urls
 from common.rag_system import initialize_chromadb, load_chromadb, create_retrieval_chain
 from common.evaluation import calculate_llm_judge_score, llm_as_judge_evaluate_response
@@ -103,7 +103,7 @@ def main():
             print("ChromaDB carregado do disco")
         
         search_kwargs = {"k": num_docs}
-        qa_chain = create_retrieval_chain(vectorstore, model, search_kwargs, PROMPT_TEMPLATE)
+        qa_chain = create_retrieval_chain(vectorstore, model, search_kwargs, PROMPT_TEMPLATE_2)
         
         for pergunta_idx, item_pergunta in enumerate(PERGUNTAS_TESTE_2, 1):
             numero_questao = item_pergunta["numero_questao"]

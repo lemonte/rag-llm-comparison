@@ -1,5 +1,5 @@
 MODELOS_EXECUTAR = ["mistral"]
-CHUNK_SIZES = [1000 ]
+CHUNK_SIZES = [1000]
 CHUNK_OVERLAPS = [ 200]
 K_DOCUMENTS_LIST = [3]
 
@@ -20,7 +20,7 @@ from common.config import (
     DOCUMENT_URLS,
     LOCAL_FILES,
     PERGUNTAS_TESTE_2,
-    PROMPT_TEMPLATE,
+    PROMPT_TEMPLATE_2,
     OPENAI_API_KEY,
     OPENAI_VECTOR_STORE_ID,
     OPENAI_FILE_SEARCH_MODEL,
@@ -190,7 +190,7 @@ def main():
             print("ChromaDB carregado do disco")
         
         search_kwargs = {"k": k_docs}
-        qa_chain = create_retrieval_chain(vectorstore, model, search_kwargs, PROMPT_TEMPLATE)
+        qa_chain = create_retrieval_chain(vectorstore, model, search_kwargs, PROMPT_TEMPLATE_2)
         
         for pergunta_idx, item_pergunta in enumerate(PERGUNTAS_TESTE_2, 1):
             numero_questao = item_pergunta["numero_questao"]

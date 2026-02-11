@@ -171,7 +171,7 @@ PERGUNTAS_TESTE_2 = [
 
 
 
-PROMPT_TEMPLATE = """
+PROMPT_TEMPLATE_1 = """
 Use o contexto abaixo para responder à pergunta. 
 Se a informação estiver presente no contexto, inclua a citação usando [source_id].
 Se não souber a resposta, diga que não sabe.
@@ -181,6 +181,46 @@ Contexto: {context}
 
 Pergunta: {question}
 """
+
+
+
+PROMPT_TEMPLATE_2 = """
+You are a programming assistant specialized in explaining concepts in a clear, didactic, and structured way.
+
+You will receive:
+- A context retrieved from a RAG (Retrieval-Augmented Generation) system
+- A user's question related to this context
+
+Your responsibilities:
+1. Identify the domain/topic of the provided context.
+2. Verify whether the user's question is relevant to this domain.
+   - If the question is NOT relevant or cannot be answered using the given context, clearly state that the information is not available in the provided context.
+3. If the question IS relevant, answer it **using only the information contained in the context**.
+   - Do NOT use external knowledge.
+   - Do NOT make assumptions beyond the context.
+
+Guidelines for the answer:
+- Provide a simple and clear response.
+- without any additional text or comments.
+- with simple and clear examples.
+- withou any content outside the context or outside the question.
+- withou any additional information.
+- Keep the answer focused and technically accurate.
+- Do NOT mention the RAG system, retrieval process, or internal reasoning.
+- the answer shoud be short and to the point.
+- analyze the question and the context to provide the most relevant answer.
+- you should mention any information relevant to the question and the context, optionally or explicitly.
+
+Context:
+{context}
+
+User Question:
+{question}
+
+Answer:
+
+"""
+
 
 OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
 OPENAI_VECTOR_STORE_ID = os.getenv("OPENAI_VECTOR_STORE_ID")

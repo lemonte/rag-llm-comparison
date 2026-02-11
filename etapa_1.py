@@ -1,11 +1,11 @@
-MODELOS_EXECUTAR = ["neural-chat"]
-CHUNK_SIZES = [1000]
-CHUNK_OVERLAPS = [100]
-K_DOCUMENTS_LIST = [3]
+MODELOS_EXECUTAR = ["llama3.2","llama3.1:405b", "llama3:70b","mistral", "deepseek-r1", "phi3", "neural-chat", "solar", "moondream"]
+CHUNK_SIZES = [1000, 1200]
+CHUNK_OVERLAPS = [100,200]
+K_DOCUMENTS_LIST = [2,3]
 
 import time
 from itertools import product
-from common.config import DOCUMENT_URLS, LOCAL_FILES, PERGUNTAS_TESTE_1, PROMPT_TEMPLATE, get_chromadb_folder, get_metrics_file
+from common.config import DOCUMENT_URLS, LOCAL_FILES, PERGUNTAS_TESTE_1, PROMPT_TEMPLATE_1, get_chromadb_folder, get_metrics_file
 from common.document_processor import fetch_and_process_urls
 from common.rag_system import initialize_chromadb, load_chromadb, create_retrieval_chain
 from common.metrics import salvar_metricas_inicializacao, salvar_metrica_pergunta, salvar_metrica_processamento
@@ -72,7 +72,7 @@ def main():
         print(f"Executando {len(PERGUNTAS_TESTE_1)} perguntas...")
         
         search_kwargs = {"k": k_docs}
-        qa_chain = create_retrieval_chain(vectorstore, model, search_kwargs, PROMPT_TEMPLATE)
+        qa_chain = create_retrieval_chain(vectorstore, model, search_kwargs, PROMPT_TEMPLATE_1)
         
         for pergunta in PERGUNTAS_TESTE_1:
             inicio = time.time()
