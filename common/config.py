@@ -203,8 +203,8 @@ Guidelines for the answer:
 - Provide a simple and clear response.
 - without any additional text or comments.
 - with simple and clear examples.
-- withou any content outside the context or outside the question.
-- withou any additional information.
+- without any content outside the context or outside the question.
+- without any additional information.
 - Keep the answer focused and technically accurate.
 - Do NOT mention the RAG system, retrieval process, or internal reasoning.
 - the answer shoud be short and to the point.
